@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity'; // adjust as necessary
 
 @Controller('users')
 export class UserController {
@@ -13,8 +14,8 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async findAll(): Promise<User[]> {
+    return this.userService.findAll(); // Ensure it calls the correct service method
   }
 
   @Get(':id')

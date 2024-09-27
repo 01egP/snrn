@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { UserController } from '../src/user/user.controller'; // Adjust path as necessary
+import { UserService } from '../src/user/user.service';
 import { User } from './entities/user.entity'; // adjust as necessary
 import * as dotenv from 'dotenv';
 
@@ -22,8 +24,9 @@ dotenv.config();
       entities: [User], // Ensure you list your entities here
       synchronize: true, // Note: Only use synchronize: true in development
     }),
+    TypeOrmModule.forFeature([User]),
   ],
-  controllers: [],
-  providers: [],
+  controllers: [UserController],
+  providers: [UserService],
 })
 export class AppModule {}

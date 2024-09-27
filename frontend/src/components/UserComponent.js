@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const UserComponent = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]); // Initial state as an empty array
 
   useEffect(() => {
-    axios.get('http://localhost:3000/users')
+    axios.get('http://localhost:3000/api/users')
       .then(response => {
-        setUsers(response.data);
+        // Ensure data is an array before setting state
+        setUsers(Array.isArray(response.data) ? response.data : []);
       })
       .catch(error => {
         console.error('There was an error fetching the users!', error);
