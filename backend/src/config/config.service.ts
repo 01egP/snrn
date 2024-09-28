@@ -1,7 +1,6 @@
-// src/config/config.service.ts
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Injectable, Logger } from '@nestjs/common';
-require('dotenv').config();
+import 'dotenv/config';
 
 @Injectable()
 export class ConfigService {
@@ -38,12 +37,8 @@ export class ConfigService {
   }
 }
 
-const configService = new ConfigService(process.env, new Logger()).ensureValues([
-  'DB_HOST',
-  'DB_PORT',
-  'DB_USERNAME',
-  'DB_PASSWORD',
-  'DB_DATABASE',
-]);
+const configService = new ConfigService(process.env, new Logger()).ensureValues(
+  ['DB_HOST', 'DB_PORT', 'DB_USERNAME', 'DB_PASSWORD', 'DB_DATABASE'],
+);
 
 export { configService };
