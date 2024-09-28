@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { configService } from '../config/config.service';
 import { UserModule } from '../user/user.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -12,7 +14,7 @@ import { UserModule } from '../user/user.module';
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()), // Use the config service for DB configuration
     UserModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
