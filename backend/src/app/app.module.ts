@@ -1,32 +1,18 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { UserController } from '../user/user.controller'; // Adjust path as necessary
-import { UserService } from '../user/user.service';
-import { User } from '../user/entities/user.entity'; // adjust as necessary
-import * as dotenv from 'dotenv';
-
-// Load environment variables from .env file
-dotenv.config();
+import { configService } from '../config/config.service';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      type: process.env.DB_TYPE as 'mysql', // type casting to match the expected type
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT, 10),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      entities: [User], // Ensure you list your entities here
-      synchronize: true, // Note: Only use synchronize: true in development
-    }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forRoot(configService.getTypeOrmConfig()), // Use the config service for DB configuration
+    UserModule,
   ],
-  controllers: [UserController],
-  providers: [UserService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
