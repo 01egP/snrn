@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { UserController } from '../src/user/user.controller'; // Adjust path as necessary
-import { UserService } from '../src/user/user.service';
-import { User } from './entities/user.entity'; // adjust as necessary
+import { UserController } from '../user/user.controller'; // Adjust path as necessary
+import { UserService } from '../user/user.service';
+import { User } from '../user/entities/user.entity'; // adjust as necessary
 import * as dotenv from 'dotenv';
 
 // Load environment variables from .env file
