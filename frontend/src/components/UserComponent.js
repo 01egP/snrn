@@ -5,7 +5,7 @@ const UserComponent = () => {
   const [users, setUsers] = useState([]); // Initial state as an empty array
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/users')
+    axios.get(`${process.env.REACT_APP_API_URL}users`)
       .then(response => {
         // Ensure data is an array before setting state
         setUsers(Array.isArray(response.data) ? response.data : []);
