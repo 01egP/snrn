@@ -25,7 +25,7 @@ export class ConfigService {
   public getTypeOrmConfig(): TypeOrmModuleOptions {
     return {
       type: 'mysql',
-      host: this.getValue('DB_HOST'),
+      host: this.getValue('DB_HOST') || 'mysql', // Ensure this is 'mysql',
       port: parseInt(this.getValue('DB_PORT')),
       username: this.getValue('DB_USERNAME'),
       password: this.getValue('DB_PASSWORD'),
