@@ -23,18 +23,24 @@ services:
       DATABASE_USER: admin
       DATABASE_PASSWORD: Password123!
       DATABASE_NAME: test_nest
+    volumes:
+      - ./backend:/usr/src/app  # Mount backend source code to enable hot-reloading
     ports:
       - "3000:3000"
     depends_on:
       - mysql
-    command: ["./wait-for-it.sh", "mysql:3306", "--", "npm", "run", "start:prod"]
+    command: ["./wait-for-it.sh", "mysql:3306", "--", "npm", "run", "start:dev"]  # Use 'start:dev' for Nodemon (development mode)
   
   react:
     build:
       context: ./frontend # Path to your React Dockerfile
     container_name: react-frontend
+    volumes:
+      - ./frontend:/usr/src/app  # Mount frontend source code to enable live updates
     ports:
-      - "3001:80" # Map port 80 inside the container to port 3001 on your machine
+      - "3001:80"  # Map port 80 inside the container to port 3001 on the host machine
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # Enable polling for live reload in Docker
 
 volumes:
   mysql-data:

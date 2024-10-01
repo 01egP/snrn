@@ -15,10 +15,11 @@ RUN npm install
 COPY . .
 
 COPY wait-for-it.sh /usr/src/app/wait-for-it.sh
+
 RUN chmod +x /usr/src/app/wait-for-it.sh
 
 # Expose the port your NestJS API will run on
 EXPOSE 3000
 
 # Run the NestJS application
-CMD ["./wait-for-it.sh", "mysql:3306", "--", "npm", "run", "start:prod"]
+CMD ["/usr/src/app/wait-for-it.sh", "mysql:3306", "--", "npm", "run", "start:dev"]
