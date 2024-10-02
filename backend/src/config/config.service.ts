@@ -32,7 +32,7 @@ export class ConfigService {
       database: this.getValue('DB_DATABASE'),
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       synchronize: true, // Only for development, disable in production
-      logging: true,
+      //   logging: true,
     };
   }
 }
