@@ -7,7 +7,6 @@ import { NotFoundException } from '@nestjs/common';
 
 describe('UserController', () => {
   let controller: UserController;
-  let service: UserService;
 
   const mockUserService = {
     create: jest.fn(),
@@ -29,7 +28,6 @@ describe('UserController', () => {
     }).compile();
 
     controller = module.get<UserController>(UserController);
-    service = module.get<UserService>(UserService);
   });
 
   it('should be defined', () => {
@@ -38,7 +36,10 @@ describe('UserController', () => {
 
   describe('create', () => {
     it('should create a new user', async () => {
-      const createUserDto: CreateUserDto = { name: 'John Doe', email: 'john@example.com' };
+      const createUserDto: CreateUserDto = {
+        name: 'John Doe',
+        email: 'john@example.com',
+      };
       const createdUser = { id: 1, ...createUserDto };
 
       mockUserService.create.mockResolvedValue(createdUser);

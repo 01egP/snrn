@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -9,7 +8,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 describe('UserService', () => {
   let service: UserService;
-  let userRepository: Repository<User>;
 
   const mockUserRepository = {
     create: jest.fn(),
@@ -32,7 +30,6 @@ describe('UserService', () => {
     }).compile();
 
     service = module.get<UserService>(UserService);
-    userRepository = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
   it('should be defined', () => {
@@ -41,7 +38,10 @@ describe('UserService', () => {
 
   describe('create', () => {
     it('should create and return a user', async () => {
-      const createUserDto: CreateUserDto = { name: 'John Doe', email: 'john@example.com' };
+      const createUserDto: CreateUserDto = {
+        name: 'John Doe',
+        email: 'john@example.com',
+      };
       const savedUser = { id: 1, ...createUserDto };
 
       mockUserRepository.create.mockReturnValue(createUserDto);
@@ -69,7 +69,9 @@ describe('UserService', () => {
       mockUserRepository.findOne.mockResolvedValue(user);
 
       expect(await service.findOne(1)).toEqual(user);
-      expect(mockUserRepository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
+      expect(mockUserRepository.findOne).toHaveBeenCalledWith({
+        where: { id: 1 },
+      });
     });
 
     it('should throw NotFoundException if user not found', async () => {
@@ -88,14 +90,19 @@ describe('UserService', () => {
       mockUserRepository.save.mockResolvedValue(updatedUser);
 
       expect(await service.update(1, updateUserDto)).toEqual(updatedUser);
-      expect(mockUserRepository.preload).toHaveBeenCalledWith({ id: 1, ...updateUserDto });
+      expect(mockUserRepository.preload).toHaveBeenCalledWith({
+        id: 1,
+        ...updateUserDto,
+      });
       expect(mockUserRepository.save).toHaveBeenCalledWith(updatedUser);
     });
 
     it('should throw NotFoundException if user not found', async () => {
       mockUserRepository.preload.mockResolvedValue(null);
 
-      await expect(service.update(1, { name: 'New Name' })).rejects.toThrow(NotFoundException);
+      await expect(service.update(1, { name: 'New Name' })).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
