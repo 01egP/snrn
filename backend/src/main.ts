@@ -11,6 +11,6 @@ async function bootstrap() {
     origin: true, // This allows all origins, use with caution
   });
   app.setGlobalPrefix('api');
-  await app.listen(process.env.PORT);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
