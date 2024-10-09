@@ -15,7 +15,8 @@ services:
   
   nest:
     build:
-      context: ./backend # Path to your NestJS Dockerfile
+      context: . # The Dockerfile is now in the root directory
+      dockerfile: Dockerfile # You can specify the Dockerfile name if needed
     container_name: nest-api
     environment:
       DATABASE_HOST: mysql
