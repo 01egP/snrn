@@ -1,38 +1,57 @@
-# Stage 1: Build the NestJS app
-FROM node:20 AS build
+# Stage 1: Build the frontend (React)
+FROM node:20 AS frontend-build
+
+# Set the working directory inside the container
+WORKDIR /usr/src/frontend
+
+# Copy package.json and package-lock.json for the frontend
+COPY frontend/package*.json ./
+
+# Install frontend dependencies
+RUN npm install
+
+# Copy the frontend source code and build it
+COPY frontend/ ./
+RUN npm run build
+
+
+# Stage 2: Build the NestJS app (backend)
+FROM node:20 AS backend-build
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json to install dependencies
-COPY package*.json ./
+# Copy package.json and package-lock.json for the backend
+COPY backend/package*.json ./
 
-# Install Node.js dependencies
+# Install backend dependencies
 RUN npm install
 
-# Copy the rest of the application source code to the container
-COPY . .
+# Copy the backend source code
+COPY backend/ ./
 
-# Build the NestJS app
+# Build the backend (NestJS)
 RUN npm run build
 
-# Stage 2: Run the built NestJS app
+
+# Stage 3: Production build
 FROM node:20 AS production
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json for production dependencies
-COPY package*.json ./
-
-# Install production dependencies only
+# Copy backend production dependencies
+COPY backend/package*.json ./
 RUN npm install --production
 
-# Copy the build files from the build stage
-COPY --from=build /usr/src/app/dist ./dist
+# Copy backend build files from the build stage
+COPY --from=backend-build /usr/src/app/dist ./dist
+
+# Copy frontend build files from the frontend build stage
+COPY --from=frontend-build /usr/src/frontend/build ./dist/frontend-build
 
 # Copy the wait-for-it script and ensure it's executable
-COPY wait-for-it.sh /usr/src/app/wait-for-it.sh
+COPY backend/wait-for-it.sh /usr/src/app/wait-for-it.sh
 RUN chmod +x /usr/src/app/wait-for-it.sh
 
 # Expose the port on which the NestJS app will run
