@@ -5,9 +5,14 @@ import { configService } from '../config/config.service';
 import { UserModule } from '../user/user.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'frontend', 'build'), // Adjust this path based on your setup
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),

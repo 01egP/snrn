@@ -1,11 +1,13 @@
-import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import UserComponent from './components/UserComponent';
 
 function App() {
   return (
-    <div className="App">
-      <UserComponent />
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/" component={UserComponent} />
+      </Switch>
+    </Router>
   );
 }
 
