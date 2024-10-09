@@ -26,7 +26,7 @@ RUN cp -r build /usr/src/app/frontend-build
 WORKDIR /usr/src/app
 
 # Ensure wait-for-it script has executable permissions
-COPY backend/wait-for-it.sh /usr/src/app/wait-for-it.sh
+COPY wait-for-it.sh /usr/src/app/wait-for-it.sh
 RUN chmod +x /usr/src/app/wait-for-it.sh
 
 # Expose the port for the backend (NestJS)
