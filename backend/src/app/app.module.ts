@@ -12,6 +12,7 @@ import { join } from 'path';
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'frontend-build'), // Adjust this path based on your setup
+      exclude: ['/api*'],
     }),
     ConfigModule.forRoot({
       isGlobal: true,
