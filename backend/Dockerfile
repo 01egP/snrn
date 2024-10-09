@@ -11,7 +11,7 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application files
+# Copy the rest of the application files 
 COPY . .
 
 COPY wait-for-it.sh /usr/src/app/wait-for-it.sh
