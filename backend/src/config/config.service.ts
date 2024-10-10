@@ -36,9 +36,9 @@ export class ConfigService {
         port: parseInt(dbUrl.port, 10),
         username,
         password,
-        database: dbUrl.pathname.substring(1), 
+        database: dbUrl.pathname.substring(1),
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        // synchronize: true, 
+        // synchronize: true,
       };
     }
 
@@ -50,7 +50,7 @@ export class ConfigService {
       password: this.getValue('DB_PASSWORD'),
       database: this.getValue('DB_DATABASE'),
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      // synchronize: true, 
+      // synchronize: true,
     };
   }
 }
