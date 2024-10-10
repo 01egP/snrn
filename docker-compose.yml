@@ -15,7 +15,7 @@ services:
   
   nest:
     build:
-      context: ./backend # Path to your NestJS Dockerfile
+      context: . # The Dockerfile is now in the root directory
     container_name: nest-api
     environment:
       DATABASE_HOST: mysql
@@ -33,7 +33,7 @@ services:
   
   react:
     build:
-      context: ./frontend # Path to your React Dockerfile
+      context: .
     container_name: react-frontend
     volumes:
       - ./frontend:/usr/src/app  # Mount frontend source code to enable live updates

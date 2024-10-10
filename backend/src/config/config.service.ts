@@ -1,6 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Injectable, Logger } from '@nestjs/common';
 import 'dotenv/config';
+import * as url from 'url';
 
 @Injectable()
 export class ConfigService {
@@ -23,16 +24,33 @@ export class ConfigService {
   }
 
   public getTypeOrmConfig(): TypeOrmModuleOptions {
+    const jawsDbUrl = this.env['JAWSDB_URL'];
+
+    if (jawsDbUrl) {
+      const dbUrl = url.parse(jawsDbUrl);
+      const [username, password] = dbUrl.auth.split(':');
+
+      return {
+        type: 'mysql',
+        host: dbUrl.hostname,
+        port: parseInt(dbUrl.port, 10),
+        username,
+        password,
+        database: dbUrl.pathname.substring(1), 
+        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        // synchronize: true, 
+      };
+    }
+
     return {
       type: 'mysql',
-      host: this.getValue('DB_HOST') || 'mysql', // Ensure this is 'mysql',
+      host: this.getValue('DB_HOST') || 'mysql',
       port: parseInt(this.getValue('DB_PORT')),
       username: this.getValue('DB_USERNAME'),
       password: this.getValue('DB_PASSWORD'),
       database: this.getValue('DB_DATABASE'),
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      synchronize: true, // Only for development, disable in production
-      //   logging: true,
+      // synchronize: true, 
     };
   }
 }
