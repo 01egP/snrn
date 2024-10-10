@@ -1,6 +1,7 @@
 # Dockerfile for React Frontend
-# Use Node.js base image
-FROM node:20
+
+# Stage 1: Build the React app
+FROM node:20 AS build
 
 # Set working directory in container
 WORKDIR /usr/src/app
@@ -17,9 +18,11 @@ COPY . .
 # Build the React app
 RUN npm run build
 
-# Use an Nginx image to serve the built React app
+# Stage 2: Serve the built React app using Nginx
 FROM nginx:alpine
-COPY --from=0 /usr/src/app/build /usr/share/nginx/html
+
+# Copy the build folder from the first stage
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
 
 # Expose the port the frontend will run on
 EXPOSE 80

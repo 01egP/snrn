@@ -1,11 +1,13 @@
-import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import UserComponent from './components/UserComponent';
 
 function App() {
   return (
-    <div className="App">
-      <UserComponent />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<UserComponent />} />
+      </Routes>
+    </Router>
   );
 }
 
