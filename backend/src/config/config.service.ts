@@ -1,7 +1,10 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Injectable, Logger } from '@nestjs/common';
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
 import * as url from 'url';
+
+const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
+dotenv.config({ path: envFile });
 
 @Injectable()
 export class ConfigService {

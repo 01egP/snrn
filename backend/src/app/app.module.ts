@@ -20,7 +20,7 @@ import { join } from 'path';
     }),
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()), // Use the config service for DB configuration
     UserModule,
-    AuthModule
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
