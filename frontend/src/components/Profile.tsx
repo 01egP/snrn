@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { UserData } from '../interfaces/user';
 
-const Profile = () => {
-  const [userData, setUserData] = useState(null);
+const Profile: React.FC = () => {
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,7 +18,6 @@ const Profile = () => {
           },
         );
         setUserData(response.data);
-        console.log('response.data :>> ', response.data);
       } catch (error) {
         console.error('Error fetching profile data', error);
       }
