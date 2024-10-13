@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { FormData } from '../interfaces/auth';
 
-const Login = () => {
-  const [formData, setFormData] = useState({
+const Login: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await axios.post(
