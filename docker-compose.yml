@@ -18,11 +18,11 @@ services:
       context: . # The Dockerfile is now in the root directory
     container_name: nest-api
     environment:
-      DATABASE_HOST: mysql
-      DATABASE_PORT: 3306
-      DATABASE_USER: admin
-      DATABASE_PASSWORD: Password123!
-      DATABASE_NAME: test_nest
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: admin
+      DB_PASSWORD: Password123!
+      DB_NAME: test_nest
     ports:
       - "3000:3000"
     depends_on:
