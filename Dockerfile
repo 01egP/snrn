@@ -40,10 +40,10 @@ WORKDIR /usr/src/app
 COPY ./backend/package*.json ./
 RUN npm install --production
 
-# Copy backend build files from the backend build stage
+# Copy the compiled backend files from the backend build stage
 COPY --from=backend-build /usr/src/app/dist ./dist
 
-# Copy frontend build files from the frontend build stage
+# Copy the frontend build files from the frontend build stage
 COPY --from=frontend-build /usr/src/frontend/build ./dist/frontend-build
 
 # Copy the wait-for-it script from backend and set executable permissions
