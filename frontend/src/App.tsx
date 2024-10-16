@@ -5,7 +5,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './components/Profile';
-import NotFound from './components/NotFound'; 
+import NotFound from './components/NotFound';
 
 const App: React.FC = () => {
   return (
