@@ -20,9 +20,9 @@ services:
     environment:
       DB_HOST: mysql
       DB_PORT: 3306
-      DB_USER: admin
+      DB_USERNAME: admin
       DB_PASSWORD: Password123!
-      DB_NAME: test_nest
+      DB_DATABASE: test_nest
     ports:
       - "3000:3000"
     depends_on:
