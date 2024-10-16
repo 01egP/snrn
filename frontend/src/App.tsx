@@ -5,6 +5,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './components/Profile';
+import NotFound from './components/NotFound'; 
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,8 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+        {/* Catch-all route for undefined paths */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
