@@ -41,8 +41,8 @@ RUN npm install --production
 # Copy the compiled backend files from the backend build stage
 COPY --from=backend-build /usr/src/app/dist ./dist
 
-# Copy the built frontend files into the directory that NestJS will use to serve static files
-COPY --from=frontend-build /usr/src/frontend/build ./frontend-build
+# Copy the built frontend files into the dist/frontend-build directory
+COPY --from=frontend-build /usr/src/frontend/build ./dist/frontend-build
 
 # Copy the wait-for-it.sh script to manage backend startup
 COPY ./backend/wait-for-it.sh /usr/src/app/wait-for-it.sh
