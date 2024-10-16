@@ -28,17 +28,7 @@ services:
       - "3000:3000"
     depends_on:
       - mysql
-    command: ["./wait-for-it.sh", "mysql:3306", "--", "npm", "run", "start:prod"]  # Use 'start:dev' for Nodemon (development mode)
-  
-  react:
-    build:
-      context: .
-      target: frontend-production
-    container_name: react-frontend
-    volumes:
-      - ./frontend:/usr/src/app  # Mount frontend source code to enable live updates
-    ports:
-      - "3001:80"  # Map port 80 inside the container to port 3001 on the host machine
+    command: ["./wait-for-it.sh", "mysql:3306", "--", "npm", "run", "start:prod"]
 
 volumes:
   mysql-data:
