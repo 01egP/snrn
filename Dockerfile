@@ -29,11 +29,9 @@ COPY ./backend/ ./
 # Build the backend (NestJS)
 RUN npm run build
 
+# Stage 3: Production backend
+FROM node:20 AS backend-production
 
-# Stage 3: Production stage
-FROM node:20 AS production
-
-# Set the working directory for production
 WORKDIR /usr/src/app
 
 # Copy backend production dependencies
@@ -43,15 +41,24 @@ RUN npm install --production
 # Copy the compiled backend files from the backend build stage
 COPY --from=backend-build /usr/src/app/dist ./dist
 
-# Copy the frontend build files from the frontend build stage
-COPY --from=frontend-build /usr/src/frontend/build ./dist/frontend-build
-
-# Copy the wait-for-it script from backend and set executable permissions
+# Copy the wait-for-it script from the backend source and set executable permissions
 COPY ./backend/wait-for-it.sh /usr/src/app/wait-for-it.sh
 RUN chmod +x /usr/src/app/wait-for-it.sh
 
-# Expose the port the app will run on
+# Expose port for the NestJS backend
 EXPOSE 3000
 
 # Start the app, ensuring MySQL is ready first
 CMD ["/usr/src/app/wait-for-it.sh", "mysql:3306", "--", "npm", "run", "start:prod"]
+
+# Stage 4: Production frontend
+FROM nginx:alpine AS frontend-production
+
+# Copy the built frontend files from the frontend build stage
+COPY --from=frontend-build /usr/src/frontend/build /usr/share/nginx/html
+
+# Expose port for Nginx
+EXPOSE 80
+
+# Start Nginx to serve the frontend
+CMD ["nginx", "-g", "daemon off;"]
