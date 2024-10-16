@@ -23,8 +23,6 @@ services:
       DATABASE_USER: admin
       DATABASE_PASSWORD: Password123!
       DATABASE_NAME: test_nest
-    volumes:
-      - ./backend:/usr/src/app  # Mount backend source code to enable hot-reloading
     ports:
       - "3000:3000"
     depends_on:
