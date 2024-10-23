@@ -13,8 +13,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/App.test.tsx"],
+  "exclude": ["src/**/*.js", "src/**/*.test.js", "src/setupTests.js", "src/reportWebVitals.js"]
 }
