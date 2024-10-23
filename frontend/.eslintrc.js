@@ -1,29 +1,25 @@
 module.exports = {
-  parser: '@babel/eslint-parser',
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2021,
     sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
     },
+    project: './tsconfig.json', // Specify the path to tsconfig.json
   },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
-  plugins: ['react', 'react-hooks', 'prettier'],
+  plugins: ['react', '@typescript-eslint'],
   env: {
-    browser: true, // Add this line to recognize browser globals like `document`
+    browser: true,
     node: true,
     es6: true,
     jest: true,
-  },
-  rules: {
-    'prettier/prettier': 'error',
-    'react/react-in-jsx-scope': 'off', // Not needed for React 17+
-    'react/prop-types': 'off', // Disable prop-types if using TypeScript
   },
   settings: {
     react: {
