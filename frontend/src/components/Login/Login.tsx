@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
-const Login: React.FC = () => {
+interface LoginProps {
+  onSwitchToRegister: () => void;
+  onClose: () => void;
+}
+
+const Login: React.FC<LoginProps> = ({ onSwitchToRegister, onClose }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -29,15 +34,11 @@ const Login: React.FC = () => {
       const { access_token } = response.data;
       localStorage.setItem('token', access_token);
       navigate('/profile');
-      console.log('Login successful');
+      onClose();
     } catch (error) {
       setError('Invalid email or password. Please try again.');
       console.error('Error during login', error);
     }
-  };
-
-  const handleReset = () => {
-    setFormData({ email: '', password: '' });
   };
 
   return (
@@ -68,17 +69,14 @@ const Login: React.FC = () => {
         <button type="submit" className="submit-btn">
           Sign in
         </button>
-        <button type="button" className="reset-btn" onClick={handleReset}>
-          Reset
+        <button
+          type="button"
+          className="reset-btn"
+          onClick={onSwitchToRegister}
+        >
+          No account? Sign up
         </button>
       </div>
-      <button
-        type="button"
-        className="signup-btn"
-        onClick={() => navigate('/register')}
-      >
-        No accounts? Sign up
-      </button>
     </form>
   );
 };
