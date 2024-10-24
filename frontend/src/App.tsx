@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/Home/Home';
 import UserComponent from './components/UserComponent';
-import Register from './components/Register';
+import Register from './components/Register/Register';
 import Login from './components/Login/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './components/Profile';
