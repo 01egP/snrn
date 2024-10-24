@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Modal from 'react-modal';
+import { useNavigate } from 'react-router-dom';
 import './Register.css';
 
-const Register: React.FC = () => {
+interface RegisterProps {
+  onSwitchToLogin: () => void;
+  onClose: () => void;
+}
+
+const Register: React.FC<RegisterProps> = ({ onSwitchToLogin, onClose }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
   });
-  const [modalIsOpen, setModalIsOpen] = useState(true);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -30,11 +33,9 @@ const Register: React.FC = () => {
         formData,
       );
       const { access_token } = response.data;
-
       localStorage.setItem('token', access_token);
-
       navigate('/profile');
-      setModalIsOpen(false);
+      onClose();
     } catch (error) {
       setError('Error during registration. Please try again.');
       console.error('Error during registration', error);
@@ -42,59 +43,48 @@ const Register: React.FC = () => {
   };
 
   return (
-    <Modal
-      isOpen={modalIsOpen}
-      onRequestClose={() => setModalIsOpen(false)}
-      className="modal"
-      overlayClassName="modal-overlay"
-    >
-      <form onSubmit={handleSubmit} className="register-form">
-        <h2>Register</h2>
-        {error && <p className="error-message">{error}</p>}
-        <div className="form-group">
-          <label>Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-actions">
-          <button type="submit" className="submit-btn">
-            Register
-          </button>
-          <button
-            type="button"
-            className="reset-btn"
-            onClick={() => setModalIsOpen(false)}
-          >
-            Close
-          </button>
-        </div>
-      </form>
-    </Modal>
+    <form onSubmit={handleSubmit} className="register-form">
+      <h2>Register</h2>
+      {error && <p className="error-message">{error}</p>}
+      <div className="form-group">
+        <label>Name</label>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label>Email</label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label>Password</label>
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div className="form-actions">
+        <button type="submit" className="submit-btn">
+          Register
+        </button>
+        <button type="button" className="reset-btn" onClick={onSwitchToLogin}>
+          Close
+        </button>
+      </div>
+    </form>
   );
 };
 
