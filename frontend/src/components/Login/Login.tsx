@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
 
@@ -7,6 +8,7 @@ const Login: React.FC = () => {
     email: '',
     password: '',
   });
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -24,6 +26,7 @@ const Login: React.FC = () => {
       );
       const { access_token } = response.data;
       localStorage.setItem('token', access_token);
+      navigate('/profile');
       console.log('Login successful');
     } catch (error) {
       console.error('Error during login', error);
