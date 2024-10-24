@@ -80,7 +80,7 @@ const Register: React.FC<RegisterProps> = ({ onSwitchToLogin, onClose }) => {
         <button type="submit" className="submit-btn">
           Register
         </button>
-        <button type="button" className="reset-btn" onClick={onSwitchToLogin}>
+        <button type="button" className="switch-btn" onClick={onSwitchToLogin}>
           Close
         </button>
       </div>

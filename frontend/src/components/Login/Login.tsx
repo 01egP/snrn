@@ -71,7 +71,7 @@ const Login: React.FC<LoginProps> = ({ onSwitchToRegister, onClose }) => {
         </button>
         <button
           type="button"
-          className="reset-btn"
+          className="switch-btn"
           onClick={onSwitchToRegister}
         >
           No account? Sign up

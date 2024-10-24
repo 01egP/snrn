@@ -29,9 +29,9 @@
 
 .form-actions {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
-  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .submit-btn {
@@ -41,12 +41,27 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  width: 100%;
+  width: 45%;
   text-align: center;
 }
 
 .submit-btn:hover {
   background-color: #45a049;
+}
+
+.switch-btn {
+  padding: 10px 20px;
+  background-color: #f4f4f4;
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 45%;
+  text-align: center;
+}
+
+.switch-btn:hover {
+  background-color: #e4e4e4;
 }
 
 .error-message {
