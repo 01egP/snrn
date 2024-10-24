@@ -8,6 +8,7 @@ const Login: React.FC = () => {
     email: '',
     password: '',
   });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,6 +20,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}auth/login`,
@@ -29,12 +31,19 @@ const Login: React.FC = () => {
       navigate('/profile');
       console.log('Login successful');
     } catch (error) {
+      setError('Invalid email or password. Please try again.');
       console.error('Error during login', error);
     }
   };
 
+  const handleReset = () => {
+    setFormData({ email: '', password: '' });
+  };
+
   return (
     <form onSubmit={handleSubmit} className="login-form">
+      <h2>Login</h2>
+      {error && <p className="error-message">{error}</p>}
       <div className="form-group">
         <label>Email</label>
         <input
@@ -57,9 +66,19 @@ const Login: React.FC = () => {
       </div>
       <div className="form-actions">
         <button type="submit" className="submit-btn">
-          Login
+          Sign in
+        </button>
+        <button type="button" className="reset-btn" onClick={handleReset}>
+          Reset
         </button>
       </div>
+      <button
+        type="button"
+        className="signup-btn"
+        onClick={() => navigate('/register')}
+      >
+        No accounts? Sign up
+      </button>
     </form>
   );
 };

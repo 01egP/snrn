@@ -31,9 +31,6 @@ const Home: React.FC = () => {
         overlayClassName="modal-overlay"
       >
         <Login />
-        <button onClick={closeModal} className="close-modal-btn">
-          Close
-        </button>
       </Modal>
     </div>
   );
