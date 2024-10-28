@@ -6,6 +6,7 @@ import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
 import { CategoryModule } from '../category/category.module';
 import { BudgetModule } from '../budget/budget.module';
+import { TransactionsModule } from '../transaction/transaction.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -21,6 +22,7 @@ import { join } from 'path';
     AuthModule,
     CategoryModule,
     BudgetModule,
+    TransactionsModule
   ],
   controllers: [AppController],
   providers: [AppService],
