@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBudgetDto } from './dto/create-budget.dto';
-import { UpdateBudgetDto } from './dto/update-budget.dto';
 import { Budget } from './entities/budget.entity';
 
 @Injectable()
@@ -25,7 +24,7 @@ export class BudgetService {
     return `This action returns a #${id} budget`;
   }
 
-  update(id: number, updateBudgetDto: UpdateBudgetDto) {
+  update(id: number) {
     return `This action updates a #${id} budget`;
   }
 
