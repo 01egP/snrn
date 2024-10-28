@@ -5,6 +5,7 @@ import { configService } from '../config/config.service';
 import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
 import { CategoryModule } from '../category/category.module';
+import { BudgetModule } from '../budget/budget.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -19,6 +20,7 @@ import { join } from 'path';
     UserModule,
     AuthModule,
     CategoryModule,
+    BudgetModule,
   ],
   controllers: [AppController],
   providers: [AppService],
