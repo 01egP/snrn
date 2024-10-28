@@ -9,8 +9,6 @@ import { BudgetModule } from '../budget/budget.module';
 import { TransactionsModule } from '../transaction/transaction.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 
 @Module({
   imports: [
@@ -22,7 +20,7 @@ import { join } from 'path';
     AuthModule,
     CategoryModule,
     BudgetModule,
-    TransactionsModule
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
