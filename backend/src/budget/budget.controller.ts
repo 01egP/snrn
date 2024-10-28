@@ -1,19 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { BudgetService } from './budget.service';
 import { CreateBudgetDto } from './dto/create-budget.dto';
 import { UpdateBudgetDto } from './dto/update-budget.dto';
+import { Budget } from './entities/budget.entity';
 
 @Controller('budget')
 export class BudgetController {
   constructor(private readonly budgetService: BudgetService) {}
 
   @Post()
-  create(@Body() createBudgetDto: CreateBudgetDto) {
+  async create(@Body() createBudgetDto: CreateBudgetDto): Promise<Budget> {
     return this.budgetService.create(createBudgetDto);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<Budget[]> {
     return this.budgetService.findAll();
   }
 
