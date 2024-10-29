@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import { AuthService } from '../../services/auth.service';
 
 interface LoginProps {
   onSwitchToRegister: () => void;
   onClose: () => void;
+  onLoginSuccess: (userName: string) => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onSwitchToRegister, onClose }) => {
+const Login: React.FC<LoginProps> = ({
+  onSwitchToRegister,
+  onLoginSuccess,
+}) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
@@ -27,14 +31,13 @@ const Login: React.FC<LoginProps> = ({ onSwitchToRegister, onClose }) => {
     e.preventDefault();
     setError('');
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}auth/login`,
-        formData,
+      const { access_token } = await AuthService.login(
+        formData.email,
+        formData.password,
       );
-      const { access_token } = response.data;
       localStorage.setItem('token', access_token);
+      onLoginSuccess('name');
       navigate('/profile');
-      onClose();
     } catch (error) {
       setError('Invalid email or password. Please try again.');
       console.error('Error during login', error);
