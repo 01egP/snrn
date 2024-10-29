@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Home from './components/Home/Home';
 import UserComponent from './components/UserComponent';
 import Register from './components/Register/Register';
 import Login from './components/Login/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './components/Profile';
+import Header from './components/Header/Header';
 import NotFound from './components/NotFound';
 import Modal from 'react-modal';
+import { CategoryService } from './services/category.service';
+import { BudgetService } from './services/budget.service';
+import { TransactionService } from './services/transaction.service';
 
 const App: React.FC = () => {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setRegisterModalOpen] = useState(false);
+  const [user, setUser] = useState<string | null>(null);
 
   const openLoginModal = () => {
     setLoginModalOpen(true);
@@ -28,10 +33,34 @@ const App: React.FC = () => {
     setRegisterModalOpen(false);
   };
 
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('token');
+  };
+
+  const handleLoginSuccess = (userName: string) => {
+    setUser(userName);
+    closeModal();
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await CategoryService.getCategories();
+      await BudgetService.getBudgets();
+      await TransactionService.getTransactions();
+    };
+
+    fetchData().catch(console.error);
+  }, []);
+
   return (
-    <Router>
+    <>
+      <Header user={user} onLogout={handleLogout} />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={<Home onLoginSuccess={handleLoginSuccess} />}
+        />
         <Route path="/user" element={<UserComponent />} />
         <Route
           path="/profile"
@@ -41,8 +70,6 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/user" element={<UserComponent />} />
-        {/* Catch-all route for undefined paths */}
         <Route path="*" element={<NotFound />} />
       </Routes>
 
@@ -52,7 +79,11 @@ const App: React.FC = () => {
         className="modal"
         overlayClassName="modal-overlay"
       >
-        <Login onSwitchToRegister={openRegisterModal} onClose={closeModal} />
+        <Login
+          onSwitchToRegister={openRegisterModal}
+          onClose={closeModal}
+          onLoginSuccess={handleLoginSuccess}
+        />
       </Modal>
 
       <Modal
@@ -63,7 +94,7 @@ const App: React.FC = () => {
       >
         <Register onSwitchToLogin={openLoginModal} onClose={closeModal} />
       </Modal>
-    </Router>
+    </>
   );
 };
 

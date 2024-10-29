@@ -6,7 +6,11 @@ import './Home.css';
 
 Modal.setAppElement('#root');
 
-const Home: React.FC = () => {
+interface HomeProps {
+  onLoginSuccess: (userName: string) => void;
+}
+
+const Home: React.FC<HomeProps> = ({ onLoginSuccess }) => {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setRegisterModalOpen] = useState(false);
 
@@ -39,7 +43,11 @@ const Home: React.FC = () => {
         className="modal"
         overlayClassName="modal-overlay"
       >
-        <Login onSwitchToRegister={openRegisterModal} onClose={closeModal} />
+        <Login
+          onSwitchToRegister={openRegisterModal}
+          onClose={closeModal}
+          onLoginSuccess={onLoginSuccess}
+        />
       </Modal>
 
       <Modal
