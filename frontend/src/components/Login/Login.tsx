@@ -11,6 +11,7 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = ({
   onSwitchToRegister,
+  onClose,
   onLoginSuccess,
 }) => {
   const navigate = useNavigate();
@@ -31,13 +32,14 @@ const Login: React.FC<LoginProps> = ({
     e.preventDefault();
     setError('');
     try {
-      const { access_token } = await AuthService.login(
+      const { access_token, name } = await AuthService.login(
         formData.email,
         formData.password,
       );
       localStorage.setItem('token', access_token);
-      onLoginSuccess('name');
+      onLoginSuccess(name);
       navigate('/profile');
+      onClose();
     } catch (error) {
       setError('Invalid email or password. Please try again.');
       console.error('Error during login', error);
