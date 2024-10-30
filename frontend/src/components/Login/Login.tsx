@@ -38,7 +38,7 @@ const Login: React.FC<LoginProps> = ({
       );
       localStorage.setItem('token', access_token);
       onLoginSuccess(name);
-      navigate('/profile');
+      navigate('/main-menu');
       onClose();
     } catch (error) {
       setError('Invalid email or password. Please try again.');
