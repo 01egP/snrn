@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Home from './components/Home/Home';
 import UserComponent from './components/UserComponent';
 import Register from './components/Register/Register';
@@ -17,6 +17,7 @@ const App: React.FC = () => {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setRegisterModalOpen] = useState(false);
   const [user, setUser] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const openLoginModal = () => {
     setLoginModalOpen(true);
@@ -36,6 +37,7 @@ const App: React.FC = () => {
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('token');
+    navigate('/');
   };
 
   const handleLoginSuccess = (userName: string) => {
