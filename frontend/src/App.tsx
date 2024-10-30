@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './components/Profile';
 import Header from './components/Header/Header';
 import NotFound from './components/NotFound';
+import MainMenu from './components/MainMenu/MainMenu';
 import Modal from 'react-modal';
 import { CategoryService } from './services/category.service';
 import { BudgetService } from './services/budget.service';
@@ -69,6 +70,14 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/main-menu"
+          element={
+            <ProtectedRoute>
+              <MainMenu />
             </ProtectedRoute>
           }
         />
