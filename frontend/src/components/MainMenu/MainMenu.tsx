@@ -1,27 +1,33 @@
-import React, { useState } from 'react';
-import Sidebar from '../Sidebar/Sidebar';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import './MainMenu.css';
 
 const MainMenu: React.FC = () => {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
-
   return (
     <div className="main-menu">
-      <header className="main-header"></header>
-      <button className="burger-menu" onClick={toggleSidebar}>
-        &#9776; {/* Symbol for burger-menu */}
-      </button>
-
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-
-      <main className="content">
-        <h2>Main Content</h2>
-        <p>Here you can manage your finances, view reports, and much more!</p>
-      </main>
+      <h2>Main Menu</h2>
+      <div className="menu-items">
+        <Link to="/dashboard" className="menu-item">
+          <div className="icon">📊</div>
+          <span>Dashboard</span>
+        </Link>
+        <Link to="/transactions" className="menu-item">
+          <div className="icon">💸</div>
+          <span>Transactions</span>
+        </Link>
+        <Link to="/profile" className="menu-item">
+          <div className="icon">👤</div>
+          <span>Profile</span>
+        </Link>
+        <Link to="/settings" className="menu-item">
+          <div className="icon">⚙️</div>
+          <span>Settings</span>
+        </Link>
+        <Link to="/reports" className="menu-item">
+          <div className="icon">📈</div>
+          <span>Reports</span>
+        </Link>
+      </div>
     </div>
   );
 };

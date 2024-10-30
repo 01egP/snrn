@@ -16,6 +16,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
       <nav>
         <ul>
           <li>
+            <Link to="/main-menu" onClick={toggleSidebar}>
+              Main Menu
+            </Link>
+          </li>
+          <li>
             <Link to="/dashboard" onClick={toggleSidebar}>
               Dashboard
             </Link>
@@ -26,8 +31,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             </Link>
           </li>
           <li>
-            <Link to="/budget" onClick={toggleSidebar}>
-              Budget
+            <Link to="/profile" onClick={toggleSidebar}>
+              Profile
+            </Link>
+          </li>
+          <li>
+            <Link to="/settings" onClick={toggleSidebar}>
+              Settings
             </Link>
           </li>
           <li>

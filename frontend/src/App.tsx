@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Home from './components/Home/Home';
 import UserComponent from './components/UserComponent';
@@ -10,14 +10,18 @@ import Header from './components/Header/Header';
 import NotFound from './components/NotFound';
 import MainMenu from './components/MainMenu/MainMenu';
 import Modal from 'react-modal';
-import { CategoryService } from './services/category.service';
-import { BudgetService } from './services/budget.service';
-import { TransactionService } from './services/transaction.service';
+import Dashboard from './components/Dashboard/Dashboard';
+import Transactions from './components/Transactions/Transactions';
+import Settings from './components/Settings/Settings';
+import Reports from './components/Reports/Reports';
+import Sidebar from './components/Sidebar/Sidebar';
+import './App.css';
 
 const App: React.FC = () => {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setRegisterModalOpen] = useState(false);
   const [user, setUser] = useState<string | null>(null);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
   const openLoginModal = () => {
@@ -46,25 +50,50 @@ const App: React.FC = () => {
     closeModal();
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await CategoryService.getCategories();
-      await BudgetService.getBudgets();
-      await TransactionService.getTransactions();
-    };
-
-    fetchData().catch(console.error);
-  }, []);
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
 
   return (
     <>
       <Header user={user} onLogout={handleLogout} />
+      <button
+        className={`burger-menu ${isSidebarOpen ? 'hidden' : ''}`}
+        onClick={toggleSidebar}
+      >
+        &#9776; {/* Symbol for burger-menu */}
+      </button>
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <Routes>
         <Route
           path="/"
           element={<Home onLoginSuccess={handleLoginSuccess} />}
         />
         <Route path="/user" element={<UserComponent />} />
+        <Route
+          path="/main-menu"
+          element={
+            <ProtectedRoute>
+              <MainMenu />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/transactions"
+          element={
+            <ProtectedRoute>
+              <Transactions />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/profile"
           element={
@@ -74,10 +103,18 @@ const App: React.FC = () => {
           }
         />
         <Route
-          path="/main-menu"
+          path="/settings"
           element={
             <ProtectedRoute>
-              <MainMenu />
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute>
+              <Reports />
             </ProtectedRoute>
           }
         />
