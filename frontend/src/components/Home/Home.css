@@ -3,7 +3,6 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #4caf50, #8bc34a);
   color: white;
   text-align: center;
   padding: 20px;
@@ -11,7 +10,7 @@
 
 .home-content {
   max-width: 600px;
-  background: rgba(255, 255, 255, 0.1);
+  background-color: #4caf50;
   padding: 40px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -34,6 +33,10 @@
 
 .feature-item p {
   font-size: 14px;
+}
+
+.feature-item span {
+  font-size: 70px;
 }
 
 .login-link,
