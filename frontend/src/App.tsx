@@ -75,7 +75,11 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Header user={user} onLogout={handleLogout} />
+      <Header
+        user={user}
+        onLogout={handleLogout}
+        onLoginClick={openLoginModal}
+      />
       {location.pathname !== '/' && (
         <button
           className={`burger-menu ${isSidebarOpen ? 'hidden' : ''}`}
