@@ -5,9 +5,10 @@ import './Header.css';
 interface HeaderProps {
   user: string | null;
   onLogout: () => void;
+  onLoginClick: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
+const Header: React.FC<HeaderProps> = ({ user, onLogout, onLoginClick }) => {
   return (
     <header className="header">
       <div className="logo">
@@ -27,7 +28,15 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
           ) : (
             <>
               <li>
-                <Link to="/">Login</Link>
+                <Link
+                  to="/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onLoginClick();
+                  }}
+                >
+                  Login
+                </Link>
               </li>
             </>
           )}
