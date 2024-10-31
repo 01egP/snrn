@@ -5,7 +5,7 @@ import UserComponent from './components/UserComponent';
 import Register from './components/Register/Register';
 import Login from './components/Login/Login';
 import ProtectedRoute from './components/ProtectedRoute';
-import Profile from './components/Profile';
+import Profile from './components/Profile/Profile';
 import Header from './components/Header/Header';
 import NotFound from './components/NotFound';
 import MainMenu from './components/MainMenu/MainMenu';
