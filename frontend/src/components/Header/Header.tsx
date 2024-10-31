@@ -15,22 +15,21 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
       </div>
       <nav>
         <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
           {user ? (
             <>
               <li>
-                <button onClick={onLogout}>Logout</button>
+                <span>Welcome, {user}!</span>
               </li>
               <li>
-                <span>{user}</span>
+                <button onClick={onLogout}>Logout</button>
               </li>
             </>
           ) : (
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
+            <>
+              <li>
+                <Link to="/">Login</Link>
+              </li>
+            </>
           )}
         </ul>
       </nav>

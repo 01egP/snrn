@@ -5,14 +5,14 @@ import { AuthService } from '../../services/auth.service';
 
 interface LoginProps {
   onSwitchToRegister: () => void;
+  onLoginSuccess: (userData: any) => void;
   onClose: () => void;
-  onLoginSuccess: (userName: string) => void;
 }
 
 const Login: React.FC<LoginProps> = ({
   onSwitchToRegister,
-  onClose,
   onLoginSuccess,
+  onClose,
 }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -32,12 +32,11 @@ const Login: React.FC<LoginProps> = ({
     e.preventDefault();
     setError('');
     try {
-      const { access_token, name } = await AuthService.login(
+      const response = await AuthService.login(
         formData.email,
         formData.password,
       );
-      localStorage.setItem('token', access_token);
-      onLoginSuccess(name);
+      onLoginSuccess(response);
       navigate('/main-menu');
       onClose();
     } catch (error) {

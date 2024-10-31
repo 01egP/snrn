@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Home from './components/Home/Home';
 import UserComponent from './components/UserComponent';
@@ -43,17 +43,35 @@ const App: React.FC = () => {
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     navigate('/');
   };
 
-  const handleLoginSuccess = (userName: string) => {
-    setUser(userName);
+  const handleLoginSuccess = (userData: any) => {
+    const { name, access_token } = userData;
+    setUser(name);
+    localStorage.setItem('user', JSON.stringify({ name }));
+    localStorage.setItem('token', access_token);
     closeModal();
   };
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+
+    if (storedUser && token) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser.name);
+      } catch (error) {
+        console.error('Error parsing user data from localStorage', error);
+      }
+    }
+  }, []);
 
   return (
     <>
