@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Home from './components/Home/Home';
 import UserComponent from './components/UserComponent';
 import Register from './components/Register/Register';
@@ -23,6 +23,7 @@ const App: React.FC = () => {
   const [user, setUser] = useState<string | null>(null);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const openLoginModal = () => {
     setLoginModalOpen(true);
@@ -57,12 +58,14 @@ const App: React.FC = () => {
   return (
     <>
       <Header user={user} onLogout={handleLogout} />
-      <button
-        className={`burger-menu ${isSidebarOpen ? 'hidden' : ''}`}
-        onClick={toggleSidebar}
-      >
-        &#9776; {/* Symbol for burger-menu */}
-      </button>
+      {location.pathname !== '/' && (
+        <button
+          className={`burger-menu ${isSidebarOpen ? 'hidden' : ''}`}
+          onClick={toggleSidebar}
+        >
+          &#9776;
+        </button>
+      )}
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <Routes>
         <Route
