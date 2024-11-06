@@ -29,9 +29,6 @@
 }
 
 .burger-menu {
-  position: fixed;
-  top: 50px;
-  left: 10px;
   font-size: 24px;
   background: none;
   border: none;
