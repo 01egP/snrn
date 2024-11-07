@@ -23,6 +23,7 @@ declare module 'leaflet' {
       max?: number;
       maxZoom?: number;
       gradient?: { [key: number]: string };
+      minOpacity?: number;
     },
   ): L.Layer;
 }
@@ -55,9 +56,10 @@ const Dashboard: React.FC = () => {
 
     useEffect(() => {
       const heatLayer = L.heatLayer(heatmap_Data, {
-        radius: 20,
-        blur: 15,
+        radius: 30,
+        blur: 25,
         max: 1.0,
+        minOpacity: 0.5,
       });
 
       heatLayer.addTo(map);
