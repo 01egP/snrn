@@ -7,7 +7,6 @@ export const TransactionService = {
   async getTransactions(): Promise<Transaction[]> {
     try {
       const response = await axios.get<Transaction[]>(API_URL);
-      console.log('Transactions:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching transactions:', error);
