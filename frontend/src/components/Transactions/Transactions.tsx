@@ -31,6 +31,17 @@ const Transactions: React.FC = () => {
   const openAddModal = () => setAddModalOpen(true);
   const closeAddModal = () => setAddModalOpen(false);
 
+  // Calculate totals based on transaction data
+  const totalIncome = transactions
+    .filter((tx) => tx.type === 'income')
+    .reduce((sum, tx) => sum + Number(tx.amount), 0);
+
+  const totalExpenses = transactions
+    .filter((tx) => tx.type === 'expense')
+    .reduce((sum, tx) => sum + Number(tx.amount), 0);
+
+  const balance = totalIncome - totalExpenses;
+
   return (
     <div className="transactions-container">
       <h1>Transactions</h1>
@@ -82,13 +93,13 @@ const Transactions: React.FC = () => {
       {/* Statistics */}
       <div className="transaction-summary">
         <span>
-          Total income: <strong>$3000.00</strong>
+          Total income: <strong>${totalIncome.toFixed(2)}</strong>
         </span>
         <span>
-          Total expenses: <strong>$1500.00</strong>
+          Total expenses: <strong>${totalExpenses.toFixed(2)}</strong>
         </span>
         <span>
-          Balance: <strong>$1500.00</strong>
+          Balance: <strong>${balance.toFixed(2)}</strong>
         </span>
       </div>
 
