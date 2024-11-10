@@ -12,6 +12,7 @@ import {
   Legend,
 } from 'chart.js';
 import { TransactionService } from '../../services/transaction.service';
+import { CategoryService } from '../../services/category.service';
 import './Dashboard.css';
 
 interface Transaction {
@@ -23,6 +24,11 @@ interface Transaction {
   categoryId: number;
   type: string;
   description: string;
+}
+
+interface Category {
+  id: number;
+  name: string;
 }
 
 // Type extension for heatLayer
@@ -46,21 +52,32 @@ ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend);
 const Dashboard: React.FC = () => {
   // State for transaction
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load transaction data when component loads
+  // Load transaction and category data when component loads
   useEffect(() => {
-    const fetchTransactions = async () => {
+    const fetchData = async () => {
       try {
-        const data = await TransactionService.getTransactions();
-        setTransactions(data);
+        const [transactionData, categoryData] = await Promise.all([
+          TransactionService.getTransactions(),
+          CategoryService.getCategories(),
+        ]);
+        // Process transactions and convert date
+        const processedTransactions = transactionData.map((tx) => ({
+          ...tx,
+          date: new Date(tx.date),
+          amount: parseFloat(String(tx.amount)),
+        }));
+        setTransactions(processedTransactions);
+        setCategories(categoryData);
       } catch (error) {
-        console.error('Error fetching transactions', error);
+        console.error('Error fetching transactions or categories', error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchTransactions();
+    fetchData();
   }, []);
 
   // Calculate KPIs based on transactions
@@ -79,7 +96,6 @@ const Dashboard: React.FC = () => {
   const center: [number, number] = [40.7128, -74.006];
 
   // Maximum amount for intensity normalization
-
   const maxAmount = Math.max(...transactions.map((tx) => tx.amount || 0), 1);
 
   // Heatmap data format
@@ -112,7 +128,7 @@ const Dashboard: React.FC = () => {
     return null;
   };
 
-  // Data for graphs
+  // Data for line chart
   const lineData = {
     labels: ['January', 'February', 'March', 'April', 'May'],
     datasets: [
@@ -135,11 +151,23 @@ const Dashboard: React.FC = () => {
     ],
   };
 
+  // Calculate category expenses for pie chart
+  const categoryExpenses = categories.reduce(
+    (acc: { [key: string]: number }, category) => {
+      const total = transactions
+        .filter((tx) => tx.categoryId === category.id && tx.type === 'expense')
+        .reduce((sum, tx) => sum + tx.amount, 0);
+      acc[category.name] = total;
+      return acc;
+    },
+    {},
+  );
+
   const pieData = {
-    labels: ['Food', 'Transportation', 'Entertainment', 'Rent', 'Health'],
+    labels: Object.keys(categoryExpenses),
     datasets: [
       {
-        data: transactions.map((tx) => tx.amount),
+        data: Object.values(categoryExpenses),
         backgroundColor: [
           '#FF6384',
           '#36A2EB',
