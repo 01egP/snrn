@@ -58,9 +58,11 @@ const Reports: React.FC = () => {
           CategoryService.getCategories(),
         ]);
 
+        // Process transactions and convert date
         const processedTransactions = transactionData.map((tx) => ({
           ...tx,
-          date: new Date(tx.date), // Convert date to Date object
+          date: new Date(tx.date),
+          amount: parseFloat(String(tx.amount)),
         }));
 
         setTransactions(processedTransactions);
@@ -85,7 +87,7 @@ const Reports: React.FC = () => {
   if (!transactions.length || !categories.length) return <p>No data</p>;
 
   // Creating a report "Expenses by category"
-  const categoryExpenses = categories.reduce(
+  const categoryExpenses: { [key: string]: number } = categories.reduce(
     (acc: { [key: string]: number }, category) => {
       const total = transactions
         .filter((tx) => tx.categoryId === category.id && tx.type === 'expense')
@@ -106,7 +108,7 @@ const Reports: React.FC = () => {
           '#36A2EB',
           '#FFCE56',
           '#4CAF50',
-          ' #FF5733',
+          '#FF5733',
         ],
       },
     ],
