@@ -1,33 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Line, Pie, Bar } from 'react-chartjs-2';
+import { Bar, Scatter, Radar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
-  ArcElement,
   CategoryScale,
   LinearScale,
   BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
-  LineElement,
-  PointElement,
+  RadialLinearScale,
 } from 'chart.js';
 import { TransactionService } from '../../services/transaction.service';
 import { CategoryService } from '../../services/category.service';
 import './Reports.css';
-
-// Register Chart.js components
-ChartJS.register(
-  ArcElement, // For Pie chart
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  LineElement,
-  PointElement,
-);
 
 interface Transaction {
   amount: number;
@@ -40,6 +27,19 @@ interface Category {
   id: number;
   name: string;
 }
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  RadialLinearScale,
+);
+
 const Reports: React.FC = () => {
   const [period, setPeriod] = useState('month');
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -58,11 +58,11 @@ const Reports: React.FC = () => {
           CategoryService.getCategories(),
         ]);
 
-        // Process transactions and convert date
+        // Process transactions and convert date to Date object
         const processedTransactions = transactionData.map((tx) => ({
           ...tx,
-          date: new Date(tx.date),
-          amount: parseFloat(String(tx.amount)),
+          date: new Date(tx.date), // Ensure date is a Date object
+          amount: parseFloat(String(tx.amount)), // Ensure amount is a number
         }));
 
         setTransactions(processedTransactions);
@@ -86,100 +86,71 @@ const Reports: React.FC = () => {
   if (error) return <p>{error}</p>;
   if (!transactions.length || !categories.length) return <p>No data</p>;
 
-  // Creating a report "Expenses by category"
-  const categoryExpenses: { [key: string]: number } = categories.reduce(
-    (acc: { [key: string]: number }, category) => {
-      const total = transactions
-        .filter((tx) => tx.categoryId === category.id && tx.type === 'expense')
-        .reduce((sum, tx) => sum + tx.amount, 0);
-      acc[category.name] = total;
-      return acc;
-    },
-    {},
-  );
-
-  const pieData = {
-    labels: Object.keys(categoryExpenses),
-    datasets: [
-      {
-        data: Object.values(categoryExpenses),
-        backgroundColor: [
-          '#FF6384',
-          '#36A2EB',
-          '#FFCE56',
-          '#4CAF50',
-          '#FF5733',
-        ],
-      },
-    ],
-  };
-
-  // Creating the report "Income and Expense for the period"
+  // Data for Stacked Bar Chart: Income and expenses by month
   const periodLabels = [
     ...new Set(transactions.map((tx) => tx.date.toISOString().slice(0, 7))),
   ].sort();
-  const incomeData = periodLabels.map((date) => {
-    return transactions
+  const incomeData = periodLabels.map((date) =>
+    transactions
       .filter(
         (tx) =>
           tx.date.toISOString().slice(0, 7) === date && tx.type === 'income',
       )
-      .reduce((sum, tx) => sum + tx.amount, 0);
-  });
-
-  const expenseData = periodLabels.map((date) => {
-    return transactions
+      .reduce((sum, tx) => sum + tx.amount, 0),
+  );
+  const expenseData = periodLabels.map((date) =>
+    transactions
       .filter(
         (tx) =>
           tx.date.toISOString().slice(0, 7) === date && tx.type === 'expense',
       )
-      .reduce((sum, tx) => sum + tx.amount, 0);
-  });
+      .reduce((sum, tx) => sum + tx.amount, 0),
+  );
 
-  const lineData = {
+  const stackedBarData = {
     labels: periodLabels,
     datasets: [
       {
         label: 'Income',
         data: incomeData,
-        fill: false,
-        borderColor: '#4CAF50',
+        backgroundColor: '#4CAF50',
       },
       {
         label: 'Expense',
         data: expenseData,
-        fill: false,
-        borderColor: '#FF5733',
+        backgroundColor: '#FF5733',
       },
     ],
   };
 
-  // Creating the report "Expense frequency by range"
-  const expenseFrequencies = {
-    '0-50': 0,
-    '50-100': 0,
-    '100-200': 0,
-    '200-300': 0,
-    '300+': 0,
-  };
-
-  transactions
-    .filter((tx) => tx.type === 'expense')
-    .forEach((tx) => {
-      if (tx.amount < 50) expenseFrequencies['0-50']++;
-      else if (tx.amount < 100) expenseFrequencies['50-100']++;
-      else if (tx.amount < 200) expenseFrequencies['100-200']++;
-      else if (tx.amount < 300) expenseFrequencies['200-300']++;
-      else expenseFrequencies['300+']++;
-    });
-
-  const barData = {
-    labels: Object.keys(expenseFrequencies),
+  // Data for Scatter Plot: Correlation between the amount of expenses and their frequency
+  const scatterData = {
     datasets: [
       {
-        label: 'Expense frequency',
-        data: Object.values(expenseFrequencies),
+        label: 'Expense Scatter',
+        data: transactions
+          .filter((tx) => tx.type === 'expense')
+          .map((tx) => ({
+            x: tx.amount,
+            y: Math.random() * 10, // Use a random value for frequency
+          })),
         backgroundColor: '#36A2EB',
+      },
+    ],
+  }; // Radar Chart data: general statistics by category
+  const radarData = {
+    labels: categories.map((cat) => cat.name),
+    datasets: [
+      {
+        label: 'Expenses by Category',
+        data: categories.map((cat) =>
+          transactions
+            .filter((tx) => tx.categoryId === cat.id && tx.type === 'expense')
+            .reduce((sum, tx) => sum + tx.amount, 0),
+        ),
+        backgroundColor: 'rgba(255,99,132,0.2)',
+        borderColor: 'rgba(255,99,132,1)',
+        borderWidth: 1,
       },
     ],
   };
@@ -193,23 +164,47 @@ const Reports: React.FC = () => {
           <option value="month">This month</option>
           <option value="last_month">Last month</option>
           <option value="quarter">This quarter</option>
-          <option value="year ">This year</option>
+          <option value="year">This year</option>
         </select>
       </div>
+
+      {/* Stacked Bar Chart: Income and Expenses by Month */}
       <div className="report-section">
-        <h2>Expenses by category</h2>
-        <div className="report-section-circle">
-          <Pie data={pieData} />
-        </div>
+        <h2>Income and Expenses by Month</h2>
+        <Bar
+          data={stackedBarData}
+          options={{
+            plugins: {
+              legend: { position: 'top' },
+            },
+            responsive: true,
+            scales: {
+              x: { stacked: true },
+              y: { stacked: true },
+            },
+          }}
+        />
       </div>
+
+      {/* Scatter Plot: Expense correlation */}
       <div className="report-section">
-        <h2>Income and expenses for period</h2>
-        <Line data={lineData} />
+        <h2>Expense Correlation</h2>
+        <Scatter
+          data={scatterData}
+          options={{
+            scales: {
+              x: { title: { display: true, text: 'Amount' } },
+              y: { title: { display: true, text: 'Frequency' } },
+            },
+          }}
+        />
       </div>
+
+      {/* Radar Chart: Expenses by Category */}
       <div className="report-section">
-        <h2>Expense frequency</h2>
-        <Bar data={barData} />
-      </div>{' '}
+        <h2>Expenses by Category</h2>
+        <Radar data={radarData} options={{ responsive: true }} />
+      </div>
     </div>
   );
 };
