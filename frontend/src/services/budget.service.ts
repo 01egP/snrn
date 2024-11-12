@@ -7,7 +7,6 @@ export const BudgetService = {
   async getBudgets(): Promise<Budget[]> {
     try {
       const response = await axios.get<Budget[]>(API_URL);
-      console.log('Budgets:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching budgets:', error);

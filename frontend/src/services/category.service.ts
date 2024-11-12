@@ -7,7 +7,6 @@ export const CategoryService = {
   async getCategories(): Promise<Category[]> {
     try {
       const response = await axios.get<Category[]>(API_URL);
-      console.log('Categories:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching categories:', error);

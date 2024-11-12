@@ -19,7 +19,6 @@ export const TransactionService = {
   ): Promise<Transaction> {
     try {
       const response = await axios.post<Transaction>(API_URL, transactionData);
-      console.log('Created Transaction:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error creating transaction:', error);
