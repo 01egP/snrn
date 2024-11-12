@@ -6,6 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import { Line, Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
+  ArcElement,
   CategoryScale,
   LinearScale,
   Tooltip,
@@ -47,7 +48,7 @@ declare module 'leaflet' {
 }
 
 // Register Chart.js components
-ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend);
+ChartJS.register(ArcElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const Dashboard: React.FC = () => {
   // State for transaction

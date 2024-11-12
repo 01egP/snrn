@@ -15,12 +15,13 @@ import Transactions from './components/Transactions/Transactions';
 import Settings from './components/Settings/Settings';
 import Reports from './components/Reports/Reports';
 import Sidebar from './components/Sidebar/Sidebar';
+import { useUser } from './contexts/UserContext';
 import './App.css';
 
 const App: React.FC = () => {
+  const { user, setUser } = useUser();
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setRegisterModalOpen] = useState(false);
-  const [user, setUser] = useState<string | null>(null);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -50,7 +51,7 @@ const App: React.FC = () => {
   const handleLoginSuccess = (userData: any) => {
     const { name, access_token } = userData;
     setUser(name);
-    localStorage.setItem('user', JSON.stringify({ name }));
+    localStorage.setItem('user', JSON.stringify(name));
     localStorage.setItem('token', access_token);
     closeModal();
   };
@@ -62,16 +63,10 @@ const App: React.FC = () => {
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     const token = localStorage.getItem('token');
-
     if (storedUser && token) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        setUser(parsedUser.name);
-      } catch (error) {
-        console.error('Error parsing user data from localStorage', error);
-      }
+      setUser(storedUser);
     }
-  }, []);
+  }, [setUser]);
 
   return (
     <>

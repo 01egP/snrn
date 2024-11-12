@@ -26,19 +26,17 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout, onLoginClick }) => {
               </li>
             </>
           ) : (
-            <>
-              <li>
-                <Link
-                  to="/"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onLoginClick();
-                  }}
-                >
-                  Login
-                </Link>
-              </li>
-            </>
+            <li>
+              <Link
+                to="/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onLoginClick();
+                }}
+              >
+                Login
+              </Link>
+            </li>
           )}
         </ul>
       </nav>

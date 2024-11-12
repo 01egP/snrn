@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { UserData } from '../../interfaces/user';
+import { useUser } from '../../contexts/UserContext';
 import './Profile.css';
 
 const Profile: React.FC = () => {
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<any>(null);
+  const { setUser } = useUser();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,13 +20,15 @@ const Profile: React.FC = () => {
           },
         );
         setUserData(response.data);
+        setUser(response.data.name);
+        localStorage.setItem('user', response.data.name);
       } catch (error) {
         console.error('Error fetching profile data', error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [setUser]);
 
   if (!userData) return <div>Loading...</div>;
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './Register.css';
+import { useUser } from '../../contexts/UserContext';
 
 interface RegisterProps {
   onSwitchToLogin: () => void;
@@ -9,82 +9,78 @@ interface RegisterProps {
 }
 
 const Register: React.FC<RegisterProps> = ({ onSwitchToLogin, onClose }) => {
+  const { setUser } = useUser();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-  });
-  const [error, setError] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const [name, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
+  const handleRegister = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const userData = { name, email, password };
+
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}auth/register`,
-        formData,
+        userData,
       );
-      const { access_token } = response.data;
-      localStorage.setItem('token', access_token);
-      navigate('/profile');
+      localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('user', response.data.user.name);
+      setUser(response.data.user.name);
       onClose();
+      navigate('/main-menu');
     } catch (error) {
-      setError('Error during registration. Please try again.');
-      console.error('Error during registration', error);
+      console.error('Error while registering:', error);
+      setError('An error occurred while registering. Please try again.');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="register-form">
-      <h2>Register</h2>
-      {error && <p className="error-message">{error}</p>}
-      <div className="form-group">
-        <label>Name</label>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label>Email</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label>Password</label>
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="form-actions">
-        <button type="submit" className="submit-btn">
-          Register
+    <div className="register-container">
+      <h2>Registration</h2>
+      <form onSubmit={handleRegister}>
+        <div className="form-group">
+          {' '}
+          <label htmlFor="name">User name</label>{' '}
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />{' '}
+        </div>
+        <div className="form-group">
+          {' '}
+          <label htmlFor="email">Email</label>{' '}
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />{' '}
+        </div>
+        <div className="form-group">
+          {' '}
+          <label htmlFor="password">Password</label>{' '}
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        {error && <p className="error-message ">{error}</p>}
+        <button type="submit">Register</button>
+        <button type="button" onClick={onSwitchToLogin}>
+          Already have an account? Login
         </button>
-        <button type="button" className="switch-btn" onClick={onSwitchToLogin}>
-          Close
-        </button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 
