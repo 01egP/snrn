@@ -104,11 +104,6 @@ const Dashboard: React.FC = () => {
     .filter((tx) => tx.latitude && tx.longitude)
     .map((tx) => [tx.latitude!, tx.longitude!, tx.amount / maxAmount]);
 
-  useEffect(() => {
-    console.log('Transactions:', transactions);
-    console.log('Heatmap Data:', heatmap_Data);
-  }, [transactions, heatmap_Data]);
-
   const HeatmapLayer = () => {
     const map = useMap();
 
