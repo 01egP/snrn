@@ -57,4 +57,16 @@ INSERT INTO budget (categoryId, amount, month, year) VALUES
 (4, 1200.00, 1, 2024),
 (5, 300.00, 1, 2024);
 
+ALTER TABLE transaction
+ADD COLUMN latitude DECIMAL(9, 6) NULL,
+ADD COLUMN longitude DECIMAL(9, 6) NULL;
 
+
+UPDATE transaction
+SET latitude = 40.7128, longitude = -74.0060
+WHERE id = 1;
+
+INSERT INTO transaction (amount, date, categoryId, type, description, latitude, longitude)
+VALUES 
+  (100.50, '2024-11-01', 1, 'expense', 'Dinner at restaurant', 40.7128, -74.0060),
+  (50.75, '2024-11-02', 2, 'expense', 'Taxi ride', 34.0522, -118.2437);
