@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Transaction } from '../types/transaction';
+import { Transaction } from '../interfaces/transaction';
 
 const API_URL = `${process.env.REACT_APP_API_URL}transaction`;
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Category } from '../types/category';
+import { Category } from '../interfaces/category';
 
 const API_URL = `${process.env.REACT_APP_API_URL}category`;
 
