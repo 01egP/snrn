@@ -70,3 +70,7 @@ INSERT INTO transaction (amount, date, categoryId, type, description, latitude, 
 VALUES 
   (100.50, '2024-11-01', 1, 'expense', 'Dinner at restaurant', 40.7128, -74.0060),
   (50.75, '2024-11-02', 2, 'expense', 'Taxi ride', 34.0522, -118.2437);
+
+ALTER TABLE user
+ADD COLUMN role VARCHAR(50) DEFAULT 'user';
+
