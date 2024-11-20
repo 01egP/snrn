@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Budget } from '../types/budget';
+import { Budget } from '../interfaces/budget';
 
 const API_URL = `${process.env.REACT_APP_API_URL}budget`;
 
