@@ -45,14 +45,16 @@ const App: React.FC = () => {
     setUser(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('role');
     navigate('/');
   };
 
   const handleLoginSuccess = (userData: any) => {
-    const { name, access_token } = userData;
+    const { name, access_token, role } = userData;
     setUser(name);
     localStorage.setItem('user', JSON.stringify(name));
     localStorage.setItem('token', access_token);
+    localStorage.setItem('role', role);
     closeModal();
   };
 
