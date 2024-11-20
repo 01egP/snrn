@@ -51,7 +51,9 @@ const App: React.FC = () => {
 
   const handleLoginSuccess = (userData: any) => {
     const { name, access_token, role } = userData;
-    setUser(name);
+    const displayName = role === 'admin' ? `${name} | admin` : name;
+
+    setUser(displayName);
     localStorage.setItem('user', JSON.stringify(name));
     localStorage.setItem('token', access_token);
     localStorage.setItem('role', role);
