@@ -1,2 +1,16 @@
 # OS
 .DS_Store
+
+# Terraform state files
+*.tfstate
+*.tfstate.backup
+
+# Terraform cache and CLI data
+.terraform/
+.terraform.lock.hcl
+
+# Crash log files
+crash.log
+
+# IDE - VSCode
+.vscode/
