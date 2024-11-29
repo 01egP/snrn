@@ -1,9 +1,13 @@
 # OS
 .DS_Store
 
+# Terraform variables
+terraform.tfvars
+
 # Terraform state files
 *.tfstate
 *.tfstate.backup
+terraform.tfstate.*.backup
 
 # Terraform cache and CLI data
 .terraform/
