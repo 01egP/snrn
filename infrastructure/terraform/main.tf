@@ -18,7 +18,7 @@ resource "aws_instance" "snrn_server" {
     Name = var.instance_name
   }
 
-  user_data = <<-EOF
+  user_data                   = <<-EOF
     #!/bin/bash
     # Update system
     sudo yum update -y
@@ -82,14 +82,14 @@ resource "aws_s3_bucket" "snrn_bucket" {
 }
 
 resource "aws_lb" "snrn_alb" {
-  name               = "snrn-alb"
-  internal           = false
-  load_balancer_type = "application"
+  name                             = "snrn-alb"
+  internal                         = false
+  load_balancer_type               = "application"
   enable_cross_zone_load_balancing = true
-  enable_http2                = true
-  idle_timeout                = 60
-  ip_address_type             = "ipv4"
-  security_groups             = [var.security_group_id]
+  enable_http2                     = true
+  idle_timeout                     = 60
+  ip_address_type                  = "ipv4"
+  security_groups                  = [var.security_group_id]
 
   subnet_mapping {
     subnet_id = var.subnet_id_1
@@ -107,7 +107,7 @@ resource "aws_lb" "snrn_alb" {
 resource "aws_cloudfront_distribution" "snrn_distribution" {
   enabled             = true
   default_root_object = "index.html"
-  is_ipv6_enabled = true
+  is_ipv6_enabled     = true
 
   lifecycle {
     ignore_changes = [
