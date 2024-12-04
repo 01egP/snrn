@@ -51,6 +51,7 @@ install_backend:
   artifacts:
     paths:
       - backend/node_modules/
+      - backend/.env
     expire_in: 1 day
 
 install_frontend:
@@ -63,6 +64,7 @@ install_frontend:
   artifacts:
     paths:
       - frontend/node_modules/
+      - frontend/.env
     expire_in: 1 day
 
 test_backend:
@@ -70,8 +72,8 @@ test_backend:
   script:
     - cd backend
     - echo "Checking .env file contents:"
-    - cat .env
     - if [ ! -f .env ]; then echo "Missing .env file"; exit 1; fi
+    - cat .env
     - source .env
     - echo "Loaded DB_TYPE:$DB_TYPE"
     - npm test
