@@ -1,0 +1,49 @@
+stages:
+  - install
+  - test
+  - build
+
+variables:
+  NODE_ENV: test
+
+install_backend:
+  stage: install
+  script:
+    - cd backend
+    - npm ci
+
+install_frontend:
+  stage: install
+  script:
+    - cd frontend
+    - npm ci
+
+test_backend:
+  stage: test
+  script:
+    - cd backend
+    - npm test
+
+test_frontend:
+  stage: test
+  script:
+    - cd frontend
+    - npm test
+
+build_backend:
+  stage: build
+  script:
+    - cd backend
+    - npm run build
+  artifacts:
+    paths:
+      - backend/dist/
+
+build_frontend:
+  stage: build
+  script:
+    - cd frontend
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/build/
