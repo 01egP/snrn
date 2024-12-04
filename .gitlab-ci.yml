@@ -18,7 +18,8 @@ cache:
 setup_environment:
   stage: setup
   script:
-    - echo "DB_TYPE=$(echo $DB_TYPE | cut -c1-5)" >> backend/.env
+    - mkdir -p backend
+    - echo "DB_TYPE=$(echo $DB_TYPE | cut -c1-5)" > backend/.env
     - echo "DB_HOST=$(echo $DB_HOST | cut -c1-5)" >> backend/.env
     - echo "DB_PORT=$(echo $DB_PORT | cut -c1-4)" >> backend/.env
     - echo "DB_USERNAME=$(echo $DB_USERNAME | cut -c1-5)" >> backend/.env
@@ -30,12 +31,15 @@ setup_environment:
     - echo "MYSQL_USER=$(echo $MYSQL_USER | cut -c1-5)" >> backend/.env
     - echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> backend/.env
 
-    - echo "REACT_APP_API_URL=$REACT_APP_API_URL" >> frontend/.env
+    - mkdir -p frontend
+    - echo "REACT_APP_API_URL=$REACT_APP_API_URL" > frontend/.env
     - echo "GENERATE_SOURCEMAP=false" >> frontend/.env
+
   artifacts:
     paths:
       - backend/.env
       - frontend/.env
+    expire_in: 1 day
 
 install_backend:
   stage: install
@@ -65,7 +69,11 @@ test_backend:
   stage: test
   script:
     - cd backend
+    - echo "Checking .env file contents:"
+    - cat .env
+    - if [ ! -f .env ]; then echo "Missing .env file"; exit 1; fi
     - source .env
+    - echo "Loaded DB_TYPE:$DB_TYPE"
     - npm test
   dependencies:
     - install_backend
@@ -74,6 +82,7 @@ test_frontend:
   stage: test
   script:
     - cd frontend
+    - if [ ! -f .env ]; then echo "Missing .env file"; exit 1; fi
     - source .env
     - npm test
   dependencies:
@@ -83,6 +92,7 @@ build_backend:
   stage: build
   script:
     - cd backend
+    - if [ ! -f .env ]; then echo "Missing .env file"; exit 1; fi
     - source .env
     - npm run build
   artifacts:
@@ -96,6 +106,7 @@ build_frontend:
   stage: build
   script:
     - cd frontend
+    - if [ ! -f .env ]; then echo "Missing .env file"; exit 1; fi
     - source .env
     - npm run build
   artifacts:
