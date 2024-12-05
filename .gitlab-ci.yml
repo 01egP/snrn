@@ -1,0 +1,119 @@
+image: node:20
+
+stages:
+  - setup
+  - install
+  - test
+  - build
+
+variables:
+  NODE_ENV: test
+
+cache:
+  key: '$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG'
+  paths:
+    - backend/node_modules/
+    - frontend/node_modules/
+
+setup_environment:
+  stage: setup
+  script:
+    - mkdir -p backend
+    - echo "DB_TYPE=$(echo $DB_TYPE | cut -c1-5)" > backend/.env
+    - echo "DB_HOST=$(echo $DB_HOST | cut -c1-5)" >> backend/.env
+    - echo "DB_PORT=$(echo $DB_PORT | cut -c1-4)" >> backend/.env
+    - echo "DB_USERNAME=$(echo $DB_USERNAME | cut -c1-5)" >> backend/.env
+    - echo "DB_PASSWORD=$DB_PASSWORD" >> backend/.env
+    - echo "DB_DATABASE=$DB_DATABASE" >> backend/.env
+    - echo "PORT=$(echo $PORT | cut -c1-4)" >> backend/.env
+    - echo "MYSQL_ROOT_PASSWORD=$(echo $MYSQL_ROOT_PASSWORD | cut -c1-4)" >> backend/.env
+    - echo "MYSQL_DATABASE=$MYSQL_DATABASE" >> backend/.env
+    - echo "MYSQL_USER=$(echo $MYSQL_USER | cut -c1-5)" >> backend/.env
+    - echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> backend/.env
+
+    - mkdir -p frontend
+    - echo "REACT_APP_API_URL=$REACT_APP_API_URL" > frontend/.env
+    - echo "GENERATE_SOURCEMAP=false" >> frontend/.env
+
+  artifacts:
+    paths:
+      - backend/.env
+      - frontend/.env
+    expire_in: 1 day
+
+install_backend:
+  stage: install
+  script:
+    - cd backend
+    - npm install
+  dependencies:
+    - setup_environment
+  artifacts:
+    paths:
+      - backend/node_modules/
+      - backend/.env
+    expire_in: 1 day
+
+install_frontend:
+  stage: install
+  script:
+    - cd frontend
+    - npm install --legacy-peer-deps
+  dependencies:
+    - setup_environment
+  artifacts:
+    paths:
+      - frontend/node_modules/
+      - frontend/.env
+    expire_in: 1 day
+
+test_backend:
+  stage: test
+  script:
+    - cd backend
+    - echo "Checking .env file contents:"
+    - if [ ! -f .env ]; then echo "Missing .env file"; exit 1; fi
+    - cat .env
+    - source .env
+    - echo "Loaded DB_TYPE:$DB_TYPE"
+    - npm test
+  dependencies:
+    - install_backend
+
+test_frontend:
+  stage: test
+  script:
+    - cd frontend
+    - if [ ! -f .env ]; then echo "Missing .env file"; exit 1; fi
+    - source .env
+    - npm test
+  dependencies:
+    - install_frontend
+
+build_backend:
+  stage: build
+  script:
+    - cd backend
+    - if [ ! -f .env ]; then echo "Missing .env file"; exit 1; fi
+    - source .env
+    - npm run build
+  artifacts:
+    paths:
+      - backend/dist/
+    expire_in: 7 days
+  dependencies:
+    - install_backend
+
+build_frontend:
+  stage: build
+  script:
+    - cd frontend
+    - if [ ! -f .env ]; then echo "Missing .env file"; exit 1; fi
+    - source .env
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/build/
+    expire_in: 7 days
+  dependencies:
+    - install_frontend

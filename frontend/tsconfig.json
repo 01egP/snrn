@@ -15,6 +15,11 @@
     "isolatedModules": true,
     "jsx": "react-jsx"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/App.test.tsx"],
-  "exclude": ["src/**/*.js", "src/**/*.test.js", "src/setupTests.js", "src/reportWebVitals.js"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/App.test.tsx",
+    "src/setupTests.js"
+  ],
+  "exclude": ["src/**/*.js", "src/**/*.test.js", "src/reportWebVitals.js"]
 }
