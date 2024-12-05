@@ -41,6 +41,7 @@ describe('UserService', () => {
       const createUserDto: CreateUserDto = {
         name: 'John Doe',
         email: 'john@example.com',
+        password: 'securePassword123',
       };
       const savedUser = { id: 1, ...createUserDto };
 
