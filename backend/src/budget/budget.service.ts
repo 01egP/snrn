@@ -28,7 +28,8 @@ export class BudgetService {
     return `This action updates a #${id} budget`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} budget`;
+  async remove(id: number): Promise<{ affected: number }> {
+    const result = await this.budgetRepository.delete(id);
+    return { affected: result.affected ?? 0 };
   }
 }
