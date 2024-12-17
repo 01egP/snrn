@@ -29,6 +29,7 @@ const Register: React.FC<RegisterProps> = ({ onSwitchToLogin, onClose }) => {
       localStorage.setItem('token', response.data.access_token);
       localStorage.setItem('user', response.data.user.name);
       localStorage.setItem('role', response.data.user.role);
+      localStorage.setItem('userID', response.data.user.id);
       setUser(response.data.user.name);
       onClose();
       navigate('/main-menu');
