@@ -50,14 +50,15 @@ const App: React.FC = () => {
   };
 
   const handleLoginSuccess = (userData: any) => {
-    const { name, access_token, role, userID } = userData;
+    const { user, access_token } = userData;
+    const { name, role, id } = user;
     const displayName = role === 'admin' ? `${name} | admin` : name;
 
     setUser(displayName);
     localStorage.setItem('user', JSON.stringify(name));
     localStorage.setItem('token', access_token);
     localStorage.setItem('role', role);
-    localStorage.setItem('userID', userID);
+    localStorage.setItem('userID', id);
     closeModal();
   };
 
