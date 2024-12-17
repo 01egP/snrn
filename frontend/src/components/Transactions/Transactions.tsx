@@ -14,19 +14,26 @@ interface Transaction {
 const Transactions: React.FC = () => {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const data = await TransactionService.getTransactions();
+        const data = await TransactionService.getTransactionsByUserId();
         setTransactions(data);
       } catch (error) {
-        console.error('Error while receiving transactions:', error);
+        console.error('Failed to fetch transactions:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchTransactions();
   }, []);
+
+  if (loading) {
+    return <div>Loading transactions...</div>;
+  }
 
   const openAddModal = () => setAddModalOpen(true);
   const closeAddModal = () => setAddModalOpen(false);
