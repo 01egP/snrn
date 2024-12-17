@@ -25,4 +25,8 @@ export class Transaction {
 
   @Column('decimal', { precision: 9, scale: 6, nullable: true })
   longitude: number | null;
+
+  @Column()
+  userId: number;
+  ß;
 }

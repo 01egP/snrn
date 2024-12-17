@@ -29,7 +29,7 @@ export class TransactionController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.transactionService.findOne(+id);
+    return this.transactionService.findByUserId(+id);
   }
 
   @Patch(':id')
