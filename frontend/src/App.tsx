@@ -67,9 +67,12 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
+    const roleUser = localStorage.getItem('role');
     const token = localStorage.getItem('token');
     if (storedUser && token) {
-      setUser(storedUser);
+      const showName =
+        roleUser === 'admin' ? `${storedUser} | admin` : storedUser;
+      setUser(showName);
     }
   }, [setUser]);
 
