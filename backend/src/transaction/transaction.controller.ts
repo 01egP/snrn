@@ -16,10 +16,12 @@ export class TransactionController {
   constructor(private readonly transactionService: TransactionService) {}
 
   @Post()
-  async create(
-    @Body() createTransactionDto: CreateTransactionDto,
-  ): Promise<Transaction> {
-    return this.transactionService.create(createTransactionDto);
+  async createTransaction(@Body() createTransactionDto: CreateTransactionDto) {
+    try {
+      return await this.transactionService.create(createTransactionDto);
+    } catch (error) {
+      console.error('Error creating transaction:', error);
+    }
   }
 
   @Get()
