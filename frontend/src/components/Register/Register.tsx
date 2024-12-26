@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../contexts/UserContext';
+import { AuthService } from '../../services/auth.service';
 
 interface RegisterProps {
   onSwitchToLogin: () => void;
@@ -19,17 +19,14 @@ const Register: React.FC<RegisterProps> = ({ onSwitchToLogin, onClose }) => {
 
   const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
-    const userData = { name, email, password };
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}auth/register`,
-        userData,
-      );
-      localStorage.setItem('token', response.data.access_token);
-      localStorage.setItem('user', response.data.user.name);
-      localStorage.setItem('role', response.data.user.role);
-      setUser(response.data.user.name);
+      const response = await AuthService.register(name, email, password);
+      localStorage.setItem('token', response.access_token);
+      localStorage.setItem('user', response.user.name);
+      localStorage.setItem('role', response.user.role);
+      localStorage.setItem('userID', response.user.id);
+      setUser(response.user.name);
       onClose();
       navigate('/main-menu');
     } catch (error) {

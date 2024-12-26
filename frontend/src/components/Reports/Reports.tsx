@@ -54,7 +54,7 @@ const Reports: React.FC = () => {
 
       try {
         const [transactionData, categoryData] = await Promise.all([
-          TransactionService.getTransactions(),
+          TransactionService.getTransactionsByUserId(),
           CategoryService.getCategories(),
         ]);
 
