@@ -28,5 +28,4 @@ export class Transaction {
 
   @Column()
   userId: number;
-  ß;
 }
