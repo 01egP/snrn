@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsNumber, IsEnum } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsEnum } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export enum TransactionType {
   INCOME = 'income',
@@ -11,9 +12,11 @@ export class CreateTransactionDto {
   amount: number;
 
   @IsNotEmpty()
+  @Type(() => Date) // Convert string to Date
   date: Date;
 
   @IsNotEmpty()
+  @IsNumber()
   categoryId: number;
 
   @IsNotEmpty()
@@ -22,4 +25,16 @@ export class CreateTransactionDto {
 
   @IsNotEmpty()
   description: string;
+
+  @IsOptional()
+  @IsNumber()
+  latitude?: number;
+
+  @IsOptional()
+  @IsNumber()
+  longitude?: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  userId: number;
 }

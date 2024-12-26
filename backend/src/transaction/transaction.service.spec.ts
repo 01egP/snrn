@@ -3,7 +3,10 @@ import { TransactionService } from './transaction.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transaction } from './entities/transaction.entity';
-import { TransactionType } from './dto/create-transaction.dto';
+import {
+  TransactionType,
+  CreateTransactionDto,
+} from './dto/create-transaction.dto';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -36,13 +39,17 @@ describe('TransactionService', () => {
   });
 
   it('should call repository.create and repository.save on create', async () => {
-    const createTransactionDto = {
+    const createTransactionDto: CreateTransactionDto = {
       amount: 100,
       type: TransactionType.INCOME,
       categoryId: 1,
       date: new Date(),
       description: 'Test transaction',
+      userId: 1,
+      latitude: 40.7128,
+      longitude: -74.006,
     };
+
     const transaction = { id: 1, ...createTransactionDto };
 
     jest
@@ -56,5 +63,56 @@ describe('TransactionService', () => {
     expect(repository.create).toHaveBeenCalledWith(createTransactionDto);
     expect(repository.save).toHaveBeenCalledWith(transaction);
     expect(result).toEqual(transaction);
+  });
+
+  it('should throw an error if userId is missing', async () => {
+    const createTransactionDto: Partial<CreateTransactionDto> = {
+      amount: 100,
+      type: TransactionType.INCOME,
+      categoryId: 1,
+      date: new Date(),
+      description: 'Test transaction',
+    };
+
+    jest.spyOn(repository, 'create').mockImplementation(() => {
+      throw new Error('userId is required');
+    });
+
+    await expect(
+      service.create(createTransactionDto as CreateTransactionDto),
+    ).rejects.toThrow('userId is required');
+  });
+
+  it('should retrieve all transactions', async () => {
+    const transactions: Transaction[] = [
+      {
+        id: 1,
+        amount: 100,
+        type: TransactionType.INCOME,
+        categoryId: 1,
+        date: new Date(),
+        description: 'Transaction 1',
+        userId: 1,
+        latitude: 40.7128,
+        longitude: -74.006,
+      },
+      {
+        id: 2,
+        amount: 50,
+        type: TransactionType.EXPENSE,
+        categoryId: 2,
+        date: new Date(),
+        description: 'Transaction 2',
+        userId: 1,
+        latitude: 40.7128,
+        longitude: -74.006,
+      },
+    ];
+
+    jest.spyOn(repository, 'find').mockResolvedValue(transactions);
+
+    const result = await service.findAll();
+    expect(repository.find).toHaveBeenCalled();
+    expect(result).toEqual(transactions);
   });
 });

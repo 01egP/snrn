@@ -14,6 +14,21 @@ export const TransactionService = {
     }
   },
 
+  async getTransactionsByUserId(): Promise<Transaction[]> {
+    try {
+      const userId = localStorage.getItem('userID');
+      if (!userId) {
+        throw new Error('User ID not found in localStorage');
+      }
+
+      const response = await axios.get<Transaction[]>(`${API_URL}/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user transactions:', error);
+      throw error;
+    }
+  },
+
   async createTransaction(
     transactionData: Omit<Transaction, 'id'>,
   ): Promise<Transaction> {
