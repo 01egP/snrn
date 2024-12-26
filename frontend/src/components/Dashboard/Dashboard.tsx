@@ -60,8 +60,13 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const userId = localStorage.getItem('userID');
+        if (!userId) {
+          throw new Error('User ID not found in localStorage');
+        }
+
         const [transactionData, categoryData] = await Promise.all([
-          TransactionService.getTransactions(),
+          TransactionService.getTransactionsByUserId(),
           CategoryService.getCategories(),
         ]);
         // Process transactions and convert date
