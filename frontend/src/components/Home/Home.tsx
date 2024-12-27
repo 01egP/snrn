@@ -59,7 +59,11 @@ const Home: React.FC<HomeProps> = ({ onLoginSuccess }) => {
           </div>
         </div>
 
-        <button onClick={openLoginModal} className="login-link">
+        <button
+          id="login-button"
+          onClick={openLoginModal}
+          className="login-link"
+        >
           Log in
         </button>
         <button onClick={openRegisterModal} className="register-link">

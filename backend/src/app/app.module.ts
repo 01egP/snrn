@@ -8,6 +8,7 @@ import { CategoryModule } from '../category/category.module';
 import { BudgetModule } from '../budget/budget.module';
 import { TransactionsModule } from '../transaction/transaction.module';
 import { AppController } from './app.controller';
+import { ReportsController } from '../puppeteer/report.controller';
 import { AppService } from './app.service';
 
 @Module({
@@ -22,7 +23,7 @@ import { AppService } from './app.service';
     BudgetModule,
     TransactionsModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, ReportsController],
   providers: [AppService],
 })
 export class AppModule {}
