@@ -1,38 +1,27 @@
-const { DataSource } = require('typeorm');
-const url = require('url');
-require('dotenv/config');
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
-const jawsDbUrl = process.env.DB_HOST;
+// In the test case, run the NODE_ENV manually
+// NODE_ENV=test npx ts-node src/data-source.ts
 
-let dataSourceConfig;
+ConfigModule.forRoot({
+  isGlobal: true,
+  envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
+});
 
-if (jawsDbUrl !== 'mysql' && jawsDbUrl !== 'localhost') {
-  const dbUrl = url.parse(jawsDbUrl);
-  const [username, password] = dbUrl.auth.split(':');
-  dataSourceConfig = {
-    type: 'mysql',
-    host: dbUrl.hostname,
-    port: parseInt(dbUrl.port, 10),
-    username,
-    password,
-    database: dbUrl.pathname.substring(1),
-    entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-    migrations: [__dirname + '/migrations/*.ts'],
-    synchronize: false,
-  };
-} else {
-  dataSourceConfig = {
-    type: 'mysql',
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT, 10),
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-    entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-    migrations: [__dirname + '/migrations/*.ts'],
-    synchronize: false,
-  };
-}
+const configService = new ConfigService();
+
+const dataSourceConfig: DataSourceOptions = {
+  type: 'mysql',
+  host: configService.get<string>('DB_HOST') || 'localhost',
+  port: parseInt(configService.get<string>('DB_PORT'), 10),
+  username: configService.get<string>('DB_USERNAME'),
+  password: configService.get<string>('DB_PASSWORD'),
+  database: configService.get<string>('DB_DATABASE'),
+  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  migrations: [__dirname + '/migrations/*.ts'],
+  synchronize: false,
+};
 
 const AppDataSource = new DataSource(dataSourceConfig);
-module.exports = AppDataSource;
+export default AppDataSource;

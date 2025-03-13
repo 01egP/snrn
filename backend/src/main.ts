@@ -1,14 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import * as dotenv from 'dotenv';
+import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
-
-// Load environment variables from the corresponding file
-const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
-dotenv.config({ path: envFile });
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+
   // Enable CORS
   app.enableCors({
     origin: true, // This allows all origins, use with caution
@@ -23,8 +21,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true, // Error on unauthorized fields
     }),
   );
-
-  const port = process.env.PORT || 3000;
+  const port = configService.get<number>('PORT') || 3000;
   await app.listen(port);
 
   console.log(`Application is running on: http://localhost:${port}/api`);
