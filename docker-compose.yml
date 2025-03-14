@@ -19,7 +19,7 @@ services:
       target: backend-production
     container_name: nest-api
     env_file:
-      - ./backend/.env
+      - "${PWD}/backend/.env"
     environment:
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
