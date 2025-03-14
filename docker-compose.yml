@@ -18,6 +18,8 @@ services:
       context: . # The Dockerfile is now in the root directory
       target: backend-production
     container_name: nest-api
+    env_file:
+      - ./backend/.env
     environment:
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
