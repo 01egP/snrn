@@ -64,7 +64,7 @@ Server will start on `http://localhost:3000/api`
 Once the backend is running, access Swagger documentation at:
 
 ```
-http://localhost:3000/api/docs
+http://localhost:3000/api-docs
 ```
 
 Provides live documentation for all endpoints, schemas, and example payloads.
