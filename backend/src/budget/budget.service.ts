@@ -1,35 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateBudgetDto } from './dto/create-budget.dto';
 import { Budget } from './entities/budget.entity';
+import { CreateBudgetDto } from './dto/create-budget.dto';
+import { UpdateBudgetDto } from './dto/update-budget.dto';
 
 @Injectable()
 export class BudgetService {
   constructor(
     @InjectRepository(Budget)
-    private readonly budgetRepository: Repository<Budget>,
+    private readonly repo: Repository<Budget>,
   ) {}
 
-  async create(createBudgetDto: CreateBudgetDto): Promise<Budget> {
-    const newBudget = this.budgetRepository.create(createBudgetDto);
-    return await this.budgetRepository.save(newBudget);
+  async create(dto: CreateBudgetDto): Promise<Budget> {
+    const budget = this.repo.create(dto);
+    return this.repo.save(budget);
   }
 
   async findAll(): Promise<Budget[]> {
-    return this.budgetRepository.find();
+    return this.repo.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} budget`;
+  async findOne(id: number): Promise<Budget> {
+    const budget = await this.repo.findOne({ where: { id } });
+    if (!budget) {
+      throw new NotFoundException(`Budget with ID ${id} not found`);
+    }
+    return budget;
   }
 
-  update(id: number) {
-    return `This action updates a #${id} budget`;
+  async update(id: number, dto: UpdateBudgetDto): Promise<Budget> {
+    const existing = await this.findOne(id);
+    const updated = this.repo.merge(existing, dto);
+    return this.repo.save(updated);
   }
 
-  async remove(id: number): Promise<{ affected: number }> {
-    const result = await this.budgetRepository.delete(id);
-    return { affected: result.affected ?? 0 };
+  async remove(id: number): Promise<void> {
+    const result = await this.repo.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Budget with ID ${id} not found`);
+    }
   }
 }
