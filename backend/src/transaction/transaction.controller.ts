@@ -9,37 +9,68 @@ import {
 } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { Transaction } from './entities/transaction.entity';
+import { TransactionResponseDto } from './dto/transaction-response.dto';
+import { ApiTags, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { plainToInstance } from 'class-transformer';
 
+@ApiTags('Transaction')
 @Controller('transaction')
 export class TransactionController {
   constructor(private readonly transactionService: TransactionService) {}
 
   @Post()
-  async createTransaction(@Body() createTransactionDto: CreateTransactionDto) {
-    try {
-      return await this.transactionService.create(createTransactionDto);
-    } catch (error) {
-      console.error('Error creating transaction:', error);
-    }
+  @ApiResponse({
+    status: 201,
+    description: 'Transaction created successfully',
+    type: TransactionResponseDto,
+  })
+  async createTransaction(
+    @Body() dto: CreateTransactionDto,
+  ): Promise<TransactionResponseDto> {
+    return this.transactionService.create(dto);
   }
 
   @Get()
-  async findAll(): Promise<Transaction[]> {
+  @ApiResponse({
+    status: 200,
+    description: 'List of all transactions',
+    type: [TransactionResponseDto],
+  })
+  async findAll(): Promise<TransactionResponseDto[]> {
     return this.transactionService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.transactionService.findByUserId(+id);
+  @ApiParam({ name: 'id', type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'Transaction by userId',
+    type: [TransactionResponseDto],
+  })
+  async findOne(@Param('id') id: string): Promise<TransactionResponseDto[]> {
+    const transactions = await this.transactionService.findByUserId(+id);
+    return plainToInstance(TransactionResponseDto, transactions);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string) {
-    return this.transactionService.update(+id);
+  @ApiParam({ name: 'id', type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'Transaction updated successfully',
+    type: TransactionResponseDto,
+  })
+  async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateTransactionDto,
+  ): Promise<TransactionResponseDto> {
+    const updated = await this.transactionService.update(+id, dto);
+    return plainToInstance(TransactionResponseDto, updated);
   }
 
   @Delete(':id')
+  @ApiParam({ name: 'id', type: Number })
+  @ApiResponse({ status: 204, description: 'Transaction deleted' })
   remove(@Param('id') id: string) {
     return this.transactionService.remove(+id);
   }
