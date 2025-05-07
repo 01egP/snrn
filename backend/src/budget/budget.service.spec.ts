@@ -71,6 +71,6 @@ describe('BudgetService', () => {
     const result = await service.remove(1);
 
     expect(deleteMock).toHaveBeenCalledWith(1);
-    expect(result).toEqual({ affected: 1 });
+    expect(result).toBeUndefined();
   });
 });

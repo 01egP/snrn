@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
@@ -37,11 +38,22 @@ export class TransactionService {
     });
   }
 
-  update(id: number) {
-    return `This action updates a #${id} transaction`;
+  async update(id: number, dto: UpdateTransactionDto): Promise<Transaction> {
+    const transaction = await this.transactionRepository.findOne({
+      where: { id },
+    });
+    if (!transaction) {
+      throw new NotFoundException(`Transaction with ID ${id} not found`);
+    }
+
+    const updated = this.transactionRepository.merge(transaction, dto);
+    return this.transactionRepository.save(updated);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} transaction`;
+  async remove(id: number): Promise<void> {
+    const result = await this.transactionRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Transaction with ID ${id} not found`);
+    }
   }
 }
