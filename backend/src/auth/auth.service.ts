@@ -13,7 +13,8 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.userService.findByEmail(email);
     if (user && (await bcrypt.compare(password, user.password))) {
-      const { ...result } = user;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: _hash, ...result } = user;
       return result;
     }
     return null;
@@ -47,8 +48,10 @@ export class AuthService {
       role: user.role,
     };
     const access_token = this.jwtService.sign(payload);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _hash, ...safeUser } = user;
     return {
-      user,
+      user: safeUser,
       access_token,
     };
   }

@@ -45,7 +45,14 @@ describe('UserController', () => {
 
       mockUserService.create.mockResolvedValue(createdUser);
 
-      expect(await controller.create(createUserDto)).toEqual(createdUser);
+      const result = await controller.create(createUserDto);
+
+      expect(result).toMatchObject({
+        id: 1,
+        name: 'John Doe',
+        email: 'john@example.com',
+      });
+      expect(result).not.toHaveProperty('password');
       expect(mockUserService.create).toHaveBeenCalledWith(createUserDto);
     });
   });

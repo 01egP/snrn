@@ -36,17 +36,12 @@ npm install
 
 ### ⚙️ Environment variables
 
-Create a `.env` file in the `backend/` directory:
+Copy `.env.example` to `.env` in the `backend/` directory and fill in your own
+values (`DB_*` for the database connection, `JWT_SECRET` for signing tokens,
+`MYSQL_*` for the MySQL container in Docker Compose):
 
-```
-DATABASE_HOST=localhost
-DATABASE_PORT=3306
-DATABASE_USERNAME=root
-DATABASE_PASSWORD=yourpassword
-DATABASE_NAME=finance_tracker
-
-JWT_SECRET=your_jwt_secret
-JWT_EXPIRES_IN=3600s
+```bash
+cp .env.example .env
 ```
 
 ### 🚀 Run the server

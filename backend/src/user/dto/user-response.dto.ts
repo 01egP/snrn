@@ -1,6 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 export class UserResponseDto {
+  // Never expose the password hash in API responses
+  @Exclude()
+  password?: string;
+
   @ApiProperty({ example: 1 })
   id: number;
 

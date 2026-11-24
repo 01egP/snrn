@@ -23,6 +23,10 @@ export class ConfigService {
     return this;
   }
 
+  public getJwtSecret(): string {
+    return this.getValue('JWT_SECRET');
+  }
+
   public getTypeOrmConfig(): TypeOrmModuleOptions {
     this.logger.log('Using standard database connection settings.');
 
